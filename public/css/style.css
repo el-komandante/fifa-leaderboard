@@ -1,0 +1,376 @@
+@media (max-width: 600px) {
+  .score .score-input {
+    width: 70%;
+  }
+}
+
+@font-face {
+  font-family: EASans;
+  src: url(../fonts/EASansCurves-Regular.ttf);
+}
+html, body, #app {
+  height: 100%;
+  min-height: 100%;
+}
+body {
+  background: #f2f2f2;
+  margin: 0;
+  color: #333;
+  font-family: 'Open Sans', sans-serif;
+  /*height: 100%;*/
+}
+h1 {
+  font-size: 2.5em;
+  margin-top: 0;
+}
+h2 {
+  margin-bottom: 5px;
+  margin-top: 5px;
+  /*margin-top: 45px;*/
+}
+button > a {
+  color: white;
+  text-decoration: none;
+}
+.app {
+  margin: 0 auto;
+  max-width: 650px;
+  background: white;
+  padding: 20px;
+  /*height: 100vh;*/
+  min-height: 100%;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+.ea-font {
+  font-family: EASans;
+  letter-spacing: 3px;
+}
+.back {
+  margin-bottom: 0;
+  color: #333;
+  font-size: 1.5em;
+  /*transition: all .1s ease;*/
+}
+.back > h2 {
+  margin: 0;
+}
+.back i {
+  margin-bottom: 0;
+}
+.back > h2 > a > i:hover {
+  color: rgb(255, 85, 0);
+}
+.submit-result {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border: none;
+  background: #ff5500;
+  color: white;
+  /*transition: all .22s ease;*/
+  font-size: 2em;
+  font-weight: 800;
+  border-bottom: solid 4px #d04702;
+  margin-top: 0;
+  /*margin-bottom: 45px;*/
+}
+.submit-result:hover {
+  margin-top: 2px;
+  border-bottom-width: 2px;
+}
+.submit-result:active {
+  margin-top: 4px;
+  border-bottom-width: 0px;
+}
+.submit-result > a, .sumbit-result > a:hover {
+  color: white;
+  text-decoration: none;
+  display: block;
+}
+
+/*Match submission form*/
+.submit-name > h1 {
+  margin-bottom: 0px;
+}
+.form > h2, .form > h1 {
+  margin-top: 0;
+}
+.winner-select > h2 {
+  margin-top: 0;
+}
+.loser-select > h2 {
+  margin-top: 15px;
+}
+.score-form > h2 {
+  margin-top: 15px;
+  margin-bottom: 0;
+}
+.submit-form {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+.submit-form > select {
+  width: 28%;
+  height: 30px;
+}
+.submit-button {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border: none;
+  background: #ff5500;
+  color: white;
+  /*transition: all .22s ease;*/
+  font-size: 2em;
+  font-weight: 800;
+  border-bottom: solid 4px #d04702;
+  margin-top: 0;
+}
+.submit-button:hover {
+  margin-top: 2px;
+  border-bottom-width: 2px;
+}
+.submit-button:active {
+  margin-top: 4px;
+  border-bottom-width: 0px;
+}
+.form {
+  margin-bottom: 50px;
+}
+.winner-loser {
+  display: flex;
+}
+.select {
+  flex-basis: 0;
+  flex-grow: 1;
+  text-align: center;
+}
+.score-form {
+  text-align: center;
+}
+.match-score {
+}
+.letters {
+  display: flex;
+}
+.w, .l {
+  flex-basis: 0;
+  flex-grow: 1;
+  display: block;
+  margin: auto;
+  text-align: center;
+}
+.w > h2, .l > h2 {
+  margin-top: 15px;
+}
+.splitter {
+  flex-grow: 2;
+  flex-basis: 0;
+}
+.score {
+  display: flex;
+}
+.win-score {
+  top: 0;
+  left: 0;
+  text-align: center;
+  flex-grow: 1;
+  flex-basis: 0;
+}
+.lose-score {
+  top: 0;
+  left: 0;
+  text-align: center;
+  flex-grow: 1;
+  flex-basis: 0;
+}
+.score-input {
+  font-size: 1.5em;
+  width: 30%;
+  text-align: center;
+  /*transition: all .2s ease-in-out;*/
+  flex-grow: 1;
+  flex-basis: none;
+}
+.score-input:focus {
+  outline: none;
+}
+.connector {
+  stroke: black;
+  stroke-width: 2px;
+}
+.winner {
+  padding-right: 5.5%;
+}
+.loser {
+  padding-left: 5.5%;
+}
+.w > h2, .l > h2 {
+  color: grey;
+  margin-bottom: 0;
+}
+.loser-select {
+  margin-top: 0;
+}
+.winner-select > select, .loser-select > select {
+  width: 40%;
+  font-size: 1.2em;
+}
+
+/*Leaderboard*/
+.leaderboard {
+  width: 100%;
+  margin-top: 45px;
+}
+.row, .leaderboard-header {
+  display: flex;
+  width: 100%;
+}
+.leaderboard-header {
+  color: white;
+  background: rgb(255, 85, 0);
+  font-weight: 700;
+}
+.leaderboard-item {
+  text-align: left;
+  flex-basis: 0;
+  padding: 5px;
+}
+.leaderboard-header-item {
+  text-align: left;
+  flex-basis: 0;
+  padding: 5px;
+}
+.position {
+  flex-grow: 1;
+  text-align: center;
+}
+.name {
+  flex-grow: 2;
+}
+.name > a {
+  text-decoration: none;
+  color: #333;
+}
+.wins {
+  flex-grow: 1.2;
+}
+.losses {
+  flex-grow: 1.5;
+}
+.elo {
+  flex-grow: 1;
+}
+.one-week {
+  flex-grow: 1;
+}
+.row {
+  background: #e2e2e2
+}
+.row:nth-child(even) {
+  background: #f8f8f8;
+}
+.increasing {
+  color: rgb(57, 181, 62);
+}
+.decreasing {
+  color: red;
+}
+
+/*User detail*/
+.detail-name {
+  margin-bottom: 0;
+}
+.detail-name > h1 {
+  margin-bottom: 0;
+}
+.elo-chart {
+  /*min-width: 300px;
+  min-height: 150px;*/
+  /*background: grey;*/
+  margin: 0 auto;
+  /*font-weight: 600;*/
+}
+/*.axis {
+  color: #333;
+  stroke: #333;
+}*/
+.elo-chart svg {
+  max-height: 400px;
+}
+g > text {
+  font-size: 1.2em;
+  font-family: 'Open Sans', sans-serif;
+  color: #333;
+}
+.line {
+    fill: none;
+    stroke: #333;
+    stroke-width: 1.5px;
+    shape-rendering: geometricPrecision;
+}
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  /*width: 60px;*/
+  padding: 5px;
+  /*font: 12px sans-serif;*/
+  background: black;
+  border: 0px;
+  border-radius: 0;
+  pointer-events: none;
+  color: white;
+}
+.row, .recent-game-header {
+  display: flex;
+  width: 100%;
+}
+.recent-game-header {
+  color: white;
+  background: rgb(255, 85, 0);
+  font-weight: 700;
+}
+.recent-games {
+  margin-bottom: 15px;
+}
+.recent-game-header-item {
+  text-align: left;
+  flex-basis: 0;
+  padding: 5px;
+  flex-grow: 1;
+}
+.recent-game-item {
+  text-align: left;
+  flex-basis: 0;
+  padding: 5px;
+  flex-grow: 1;
+}
+.recent-game-result {
+  font-weight: 700;
+  padding-left: 20px;
+}
+.recent-game-vs > a {
+    text-decoration: none;
+    color: #333;
+}
+/*Transitions*/
+.pageSlide-enter {
+  /*opacity: 0.4;*/
+  transform: translate3d(100%, 0, 0);
+}
+.pageSlide-enter.pageSlide-enter-active {
+  /*opacity: 1;*/
+  transform: translate3d(0, 0, 0);
+  transition: all 300ms ease;
+}
+.pageSlide-leave {
+  /*opacity: 1;*/
+  transform: translate3d(0, 0, 0);
+}
+.pageSlide-leave.pageSlide-leave-active {
+  /*opacity: 0.1;*/
+  transform: translate3d(100%, 0, 0);
+  transition: opacity 300ms ease;
+}
