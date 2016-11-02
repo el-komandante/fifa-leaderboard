@@ -6,19 +6,42 @@ import * as services from '../api-services/apiService';
 
 export default class Leaderboard extends React.Component {
   constructor() {
-    console.log(2)
     super();
     this.state = {
       users: []
     };
 
-    services.getUsers()
-    .then(users => { this.setState({users})})
+    let users = services.getUsers()
+    .then(users => {
+      this.state.users = users
+      this.forceUpdate()
+
+      for (let i = 0; i < users.length; i++) {
+        let user = users[i]
+        services.getGames(user.id).then( games => {
+          user.games = games;
+          user.oldScore = (user.id === user.games[0].winner.id) ? games[0].winner.score: games[0].loser.score;
+          user.newScore = (user.id === user.games[1].winner.id) ? user.games[1].winner.score: user.games[1].loser.score;
+          users[i] = user
+          this.forceUpdate()
+        })
+      }
+    })
   }
 
   getLeaderboardItems () {
     let data = this.state.users;
-    let rows = data.map(function (user, i) {
+    // data = data.map( user => {
+    //   // user.games = [];
+    //   services.getGames(user.id).then( games => { user.games = games.reverse().slice(games.length-3, games.length-1) })
+    //   // user.games = games;
+    //   return user;
+    // })
+    console.log(data);
+    let rows = data.map( (user, i) => {
+      // let oldScore = (user.id === user.games[0].winner.id) ? user.games[0].winner.score: user.games[0].loser.score;
+      // let newScore = (user.id === user.games[1].winner.id) ? user.games[1].winner.score: user.games[1].loser.score;
+      console.log(user.oldScore)
        return (
          <div key={i} className='row'>
            <div className='leaderboard-item position'>{i + 1}</div>
@@ -28,9 +51,9 @@ export default class Leaderboard extends React.Component {
            <div className='leaderboard-item elo'>{user.score}</div>
            <div className='leaderboard-item one-week'>
              {
-               Math.random() < .5 ?
-               (<i className="fa fa-arrow-up increasing" aria-hidden="true"></i>):
-               (<i className="fa fa-arrow-down decreasing" aria-hidden="true"></i>)
+               user.oldScore === user.newScore ? '-' :user.oldScore < user.newScore ?
+                   (<i className="fa fa-arrow-up increasing" aria-hidden="true"></i>):
+                   (<i className="fa fa-arrow-down decreasing" aria-hidden="true"></i>)
              }
            </div>
          </div>
@@ -39,17 +62,31 @@ export default class Leaderboard extends React.Component {
     return rows
   }
 
-  componentWillMount () {
-    this.getLeaderboardItems();
+  // componentWillMount () {
+  //   console.log(this.state)
+  // }
+  componentDidMount () {
+    // console.log(this.state)
   }
 
+  // componentDidUpdate () {
+  //   // let users = this.state.users.map( user => {
+  //   //   user.games = services.getGames(user.id).then(games => { return games; });
+  //   //   return user;
+  //   // })
+  //   // console.log(this.state.users)
+  //   // this.setState({users});
+  //   // this.getLeaderboardItems();
+  // }
+
   render () {
-    let rows = this.getLeaderboardItems()
+    console.log(this.state)
+    let rows = this.getLeaderboardItems();
     return (
-      <div>
-      <div>
-        <h1 className='ea-font'>FIFA 17 RANKINGS</h1>
-      </div>
+      <div className='container'>
+        <div>
+          <h1 className='ea-font'>FIFA 17 RANKINGS</h1>
+        </div>
         <button className='submit-result'><a href='./#/submit'>SUBMIT RESULT</a></button>
         <div className='leaderboard'>
           <h2 className='ea-font rankings'>RANKINGS</h2>

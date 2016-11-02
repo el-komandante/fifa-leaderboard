@@ -9,58 +9,73 @@ export default class SubmitResult extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      winner: '',
-      loser: '',
-      winScore: 0,
-      loseScore: 0,
+      winner_id: 1,
+      loser_id: 1,
+      winner_goals: 0,
+      loser_goals: 0,
       users: []
     };
     services.getUsers()
-    .then(users => { this.setState({users})})
+    .then(users => {
+      users.reverse();
+      this.setState({users});
+    })
   }
 
   getOptions () {
     let users = this.state.users.map( (user, i) => {
-      return <option key={i}>{user.name}</option>;
+      return <option key={user} data-id={user.id} key={i}>{user.name}</option>;
     });
     return users;
   }
 
   handleSubmit (e) {
-    console.log(this.state);
+    let game = {
+      winner_goals: this.state.winner_goals,
+      loser_goals: this.state.loser_goals,
+      winner: {
+        id: this.state.winner_id
+      },
+      loser: {
+        id: this.state.loser_id
+      }
+    }
+    services.submitGame(game);
+    console.log(game);
   }
 
   handleWinnerChange (e) {
-    let value = e.target.value;
+    let value = +e.target.options[e.target.selectedIndex].dataset.id;
     this.setState({
-      winner: value
+      winner_id: value
     });
   }
 
   handleLoserChange (e) {
-    let value = e.target.value;
+    let value = +e.target.options[e.target.selectedIndex].dataset.id;
     this.setState({
-      loser: value
+      loser_id: value
     });
   }
 
   handleWinScoreChange (e) {
     let value = parseInt(e.target.value) || 0;
     this.setState({
-      winScore: value
+      winner_goals: value
     });
   }
 
   handleLoseScoreChange (e) {
     let value = parseInt(e.target.value) || 0;
     this.setState({
-      loseScore: value
+      loser_goals: value
     });
   }
 
   render () {
+    let options = this.getOptions();
     return (
-        <div>
+        <div className='container'>
           <div className='submit-name'>
             <h1 className='ea-font'>
               Submit Result
@@ -77,7 +92,7 @@ export default class SubmitResult extends React.Component {
             <div className='winner-select select'>
               <h2>Winner</h2>
               <select onChange={this.handleWinnerChange.bind(this)}>
-                {this.getOptions()}
+                {options}
               </select>
             </div>
             <div className='score-form'>
@@ -92,10 +107,10 @@ export default class SubmitResult extends React.Component {
                 <div className='score'>
                   <div className='splitter'></div>
                   <div className='win-score'>
-                    <input className='score-input' onChange={this.handleWinScoreChange.bind(this)} value={this.state.winScore}></input>
+                    <input className='score-input' value={this.state.winner_goals} onChange={this.handleWinScoreChange.bind(this)}></input>
                   </div>
                   <div className='lose-score'>
-                    <input className='score-input' value={this.state.loseScore} onChange={this.handleLoseScoreChange.bind(this)}></input>
+                    <input className='score-input' value={this.state.loser_goals} onChange={this.handleLoseScoreChange.bind(this)}></input>
                   </div>
                   <div className='splitter'></div>
                 </div>

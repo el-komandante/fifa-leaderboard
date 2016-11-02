@@ -1,7 +1,7 @@
 /* jshint esversion: 6 */
 import axios from 'axios';
 
-const IP_ADDRESS = '192.168.0.102:3002';
+const IP_ADDRESS = '192.168.0.106:3002';
 const instance = axios.create({
   baseURL: 'http://' + IP_ADDRESS,
   timeout: 1000
@@ -24,4 +24,10 @@ function getGames (id) {
   .then( response => { return response.data; } )
   .catch( error => console.error(error) );
 }
-export { getUsers, getUser, getGames };
+
+function submitGame (game) {
+  instance.post('/games/', game)
+  .then( response => { return response.data; })
+  .catch( error => console.error(error) );
+}
+export { getUsers, getUser, getGames, submitGame };

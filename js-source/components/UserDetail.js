@@ -67,14 +67,13 @@ export default class UserDetail extends React.Component {
     let parseTime = d3.timeParse('%m/%d/%Y');
     let formatTime = d3.timeFormat('%m/%d/%Y');
 
+
     data = this.state.games.map( game => {
       return {
-        elo: this.state.user.id === game.winner.id ? game.winner_score : game.loser_score,
+        elo: this.state.user.id === game.loser.id ? game.winner_score : game.loser_score,
         date: new Date(1000*game.date)
       };
     });
-
-    // data = data.map( d => { return {date: new Date(d.date*1000), elo: +d.elo} } );
 
     let x = d3.scaleTime()
             .rangeRound([0, width])
@@ -97,13 +96,14 @@ export default class UserDetail extends React.Component {
     trans0.selectAll('.axis--x').call(d3.axisBottom(x));
 
     let path0 = d3.select('.line')
-    console.log(path0);
+    // console.log(path0);
     let totalLength0 = path0.node().getTotalLength();
     console.log(totalLength0)
-    path0.attr('stroke-dasharray', totalLength0)
+    path0
+    .attr('stroke-dasharray', totalLength0)
       .attr('stroke-dashoffset', 0)
-      .transition()
-      .duration(550)
+      // .transition(t)
+      // .duration(550)
       .attr('stroke-dashoffset', totalLength0)
       .remove();
 
@@ -235,7 +235,6 @@ export default class UserDetail extends React.Component {
     	.attr('stroke-dashoffset', totalLength)
       .transition()
     	.duration(1000)
-    	// .ease("linear") // Set Easing option
     	.attr('stroke-dashoffset', 0);
 
 
@@ -299,7 +298,7 @@ export default class UserDetail extends React.Component {
   render () {
     let games = this.getGames();
     return (
-      <div>
+      <div className='container'>
         <div className='detail-name'>
           <h1 className='ea-font'>
             {this.state.user.name}

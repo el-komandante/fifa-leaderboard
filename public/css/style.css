@@ -8,6 +8,9 @@
   font-family: EASans;
   src: url(../fonts/EASansCurves-Regular.ttf);
 }
+html {
+  overflow-y: scroll;
+}
 html, body, #app {
   height: 100%;
   min-height: 100%;
@@ -41,6 +44,16 @@ button > a {
   min-height: 100%;
   box-sizing: border-box;
   -webkit-overflow-scrolling: touch;
+}
+.transitionGroup {
+  position: relative;
+}
+.container {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
 }
 .ea-font {
   font-family: EASans;
@@ -357,20 +370,38 @@ div.tooltip {
 }
 /*Transitions*/
 .pageSlide-enter {
-  /*opacity: 0.4;*/
-  transform: translate3d(100%, 0, 0);
+  opacity: 0;
+  transform: translate(100%);
 }
 .pageSlide-enter.pageSlide-enter-active {
-  /*opacity: 1;*/
-  transform: translate3d(0, 0, 0);
-  transition: all 300ms ease;
+  opacity: 1;
+  transform: translate(0%);
+  transition: all 300ms ease-in-out;
 }
 .pageSlide-leave {
-  /*opacity: 1;*/
-  transform: translate3d(0, 0, 0);
+  opacity: 1;
+  transform: translate3(0%);
 }
 .pageSlide-leave.pageSlide-leave-active {
-  /*opacity: 0.1;*/
-  transform: translate3d(100%, 0, 0);
-  transition: opacity 300ms ease;
+  opacity: 0;
+  transform: translate(-100%);
+  transition: all 200ms ease-in-out;
+}
+.reversePageSlide-enter {
+  opacity: 0;
+  transform: translate(-100%);
+}
+.reversePageSlide-enter.reversePageSlide-enter-active {
+  opacity: 1;
+  transform: translate(0%);
+  transition: all 300ms ease-in-out;
+}
+.reversePageSlide-leave {
+  opacity: 1;
+  transform: translate3(0%);
+}
+.reversePageSlide-leave.reversePageSlide-leave-active {
+  opacity: 0;
+  transform: translate(100%);
+  transition: all 200ms ease-in-out;
 }
