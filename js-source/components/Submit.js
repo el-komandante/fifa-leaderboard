@@ -2,8 +2,6 @@
 import React from 'react';
 import * as services from '../api-services/apiService';
 import { IndexLink } from 'react-router';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-
 
 export default class SubmitResult extends React.Component {
   constructor(props) {
@@ -13,7 +11,9 @@ export default class SubmitResult extends React.Component {
       loser_id: 1,
       winner_goals: 0,
       loser_goals: 0,
-      users: []
+      users: [],
+      goalError: false,
+      playerError: false
     };
     services.getUsers()
     .then(users => {
@@ -30,18 +30,37 @@ export default class SubmitResult extends React.Component {
   }
 
   handleSubmit (e) {
+    let goalError = false;
+    let playerError = false;
     let game = {
       winner_goals: this.state.winner_goals,
       loser_goals: this.state.loser_goals,
-      winner: {
-        id: this.state.winner_id
-      },
-      loser: {
-        id: this.state.loser_id
-      }
+      winner_id: this.state.winner_id,
+      loser_id: this.state.loser_id
     }
-    services.submitGame(game);
-    console.log(game);
+    if (game.winner_goals < game.loser_goals) {
+      goalError = true;
+      this.setState({goalError: true});
+    }
+    else if (game.winner_goals >= game.loser_goals) {
+      goalError = false;
+      this.setState({goalError: false});
+    }
+
+    if (game.winner_id === game.loser_id) {
+      playerError = true;
+      this.setState({playerError: true});
+    }
+    else if (game.winner_id != game.loser_id) {
+      playerError = false;
+      this.setState({playerError: false});
+    }
+
+    if (!goalError && !playerError) {
+      services.submitGame(game);
+      console.log(game);
+      this.context.router.push('/');
+    }
   }
 
   handleWinnerChange (e) {
@@ -91,8 +110,8 @@ export default class SubmitResult extends React.Component {
           <div className='form'>
             <div className='winner-select select'>
               <h2>Winner</h2>
-              <select onChange={this.handleWinnerChange.bind(this)}>
-                {options}
+              <select className={this.state.playerError && 'error'} onChange={this.handleWinnerChange.bind(this)}>
+                {this.getOptions()}
               </select>
             </div>
             <div className='score-form'>
@@ -107,24 +126,28 @@ export default class SubmitResult extends React.Component {
                 <div className='score'>
                   <div className='splitter'></div>
                   <div className='win-score'>
-                    <input className='score-input' value={this.state.winner_goals} onChange={this.handleWinScoreChange.bind(this)}></input>
+                    <input className={this.state.goalError ? 'score-input error': 'score-input'} value={this.state.winner_goals} onChange={this.handleWinScoreChange.bind(this)}></input>
                   </div>
                   <div className='lose-score'>
-                    <input className='score-input' value={this.state.loser_goals} onChange={this.handleLoseScoreChange.bind(this)}></input>
+                    <input className={this.state.goalError ? 'score-input error': 'score-input'} value={this.state.loser_goals} onChange={this.handleLoseScoreChange.bind(this)}></input>
                   </div>
                   <div className='splitter'></div>
                 </div>
               </div>
             </div>
-            <div className='loser-select select'>
+            <div className={'loser-select select'}>
               <h2>Loser</h2>
-              <select>
+              <select className={this.state.playerError && 'error'} onChange={this.handleLoserChange.bind(this)}>
                 {this.getOptions()}
               </select>
             </div>
           </div>
-          <button className='submit-button' onClick={this.handleSubmit.bind(this)}><a>SUBMIT</a></button>
+          <button className='submit-button' onClick={this.handleSubmit.bind(this)}>SUBMIT</button>
         </div>
     );
   }
 }
+
+SubmitResult.contextTypes = {
+   router: React.PropTypes.object.isRequired
+ };
