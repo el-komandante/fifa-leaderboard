@@ -17,7 +17,8 @@ export default class SubmitResult extends React.Component {
     };
     services.getUsers()
     .then(users => {
-      users.reverse();
+      // users.reverse();
+      console.log(users);
       this.setState({users});
     })
   }

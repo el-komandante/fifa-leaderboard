@@ -4,7 +4,6 @@ import { IndexLink } from 'react-router';
 // import { select, axis, scaleTime, timeParse, scaleLinear, extent, axisBottom, axisLeft } from 'd3';
 // import line from 'd3-shape';
 import * as d3 from 'd3';
-// import * as interpolatePath from 'd3-interpolate-path';
 import * as services from '../api-services/apiService';
 import moment from 'moment';
 import { StaggeredMotion, spring } from 'react-motion';
@@ -17,14 +16,17 @@ export default class UserDetail extends React.Component {
       games: null,
     };
 
-    services.getUser(+this.props.params.id)
-    .then( user => this.setState({user}))
+    const id = +this.props.params.id;
+    services.getUser(id)
+    .then( user => {
+      services.getGames(id)
+      .then( games => this.setState({user, games}))
+    })
 
-    services.getGames(+this.props.params.id)
-    .then( games => this.setState({games}))
   }
 
   getGames () {
+    console.log(this.state.games[0].winner_goals === this.state.games[0]);
     const games = this.state.games.reverse().slice(0,5);
     const user = this.state.user;
     const startOpacity = 0;
@@ -45,7 +47,13 @@ export default class UserDetail extends React.Component {
               {interpolatingStyles.map((style, i) =>
                 <div key={i} className='row' style={{opacity: style.o, transform: `translateY(${style.y}px)`}}>
                   <div className='recent-game-item recent-game-result'>
-                    {games[i].winner.id === user.id ? 'W': 'L'}
+                    {
+                      games[i].winner_goals === games[i].loser_goals
+                      ? 'D'
+                      : games[i].winner.id === user.id
+                        ? 'W'
+                        : 'L'
+                    }
                   </div>
                   <div className='recent-game-item recent-game-vs'>
                     {
@@ -67,16 +75,16 @@ export default class UserDetail extends React.Component {
     );
   }
 
-  updateGraph (data) {
-    let margin = {top: 20, right: 20, bottom: 20, left: 50};
-    let width = 400 - margin.left - margin.right;
-    let height = 300 - margin.top - margin.bottom;
+  updateGraph () {
+    const margin = {top: 20, right: 20, bottom: 20, left: 50};
+    const width = 400 - margin.left - margin.right;
+    const height = 300 - margin.top - margin.bottom;
 
-    let parseTime = d3.timeParse('%m/%d/%Y');
-    let formatTime = d3.timeFormat('%m/%d/%Y');
+    const parseTime = d3.timeParse('%m/%d/%Y');
+    const formatTime = d3.timeFormat('%m/%d/%Y');
 
 
-    data = this.state.games.map( game => {
+    const data = this.state.games.map( game => {
       return {
         elo: this.state.user.id === game.loser.id ? game.winner_score : game.loser_score,
         date: new Date(1000*game.date)
@@ -88,7 +96,7 @@ export default class UserDetail extends React.Component {
             .domain(d3.extent(data, d => d.date ));
     let y = d3.scaleLinear()
             .rangeRound([height, 0])
-            .domain([0, d3.max(data, d => d.elo ) + 100]);
+            .domain([0, (Math.floor(d3.max(data, d => d.elo ) / 100) * 100) + 100]);
 
     let newLine = d3.line()
         .x( d => x(d.date) )
@@ -97,25 +105,31 @@ export default class UserDetail extends React.Component {
     let svg = d3.select('svg');
     let div = d3.select('.elo-chart div');
     let g = svg.select('g');
-    let t = d3.transition().duration(700);
+    let xAxis = d3.select('axis--x');
 
-    let trans0 = svg.transition(t);
+    // xAxis.ticks(10)
+    //     .selectAll('text')
+    //      .style('text-anchor', 'end')
+    //      .attr("dx", "-.8em")
+    //      .attr("dy", ".15em")
+    //      .attr('transform', 'rotate(-65)');
+
+
+    const t = d3.transition().duration(500);
+    const lineT = d3.transition().duration(500);
+
+    const trans0 = svg.transition(t);
     trans0.selectAll('.axis--y').call(d3.axisLeft(y));
     trans0.selectAll('.axis--x').call(d3.axisBottom(x));
 
     let path0 = d3.select('.line')
-    // console.log(path0);
     let totalLength0 = path0.node().getTotalLength();
-    // console.log(totalLength0)
-    path0
-      // .style('opacity', 1)
-    // .attr('stroke-dasharray', totalLength0)
-    //   .attr('stroke-dashoffset', 0)
-    //   .attr('class', 'line-leaving')
-      // .transition()
-      // .duration(100)
-    //   .attr('stroke-dashoffset', totalLength0)
-      // .style('opacity', 0)
+
+    path0.attr('stroke-dasharray', totalLength0)
+      .attr('stroke-dashoffset', 0)
+      .transition()
+      .duration(350)
+      .attr('stroke-dashoffset', -totalLength0)
       .remove();
 
     let path1 = g.append('path')
@@ -126,9 +140,10 @@ export default class UserDetail extends React.Component {
     let totalLength1 = path1.node().getTotalLength();
 
     path1.attr('stroke-dasharray', totalLength1 + ' ' + totalLength1)
-      .attr('stroke-dashoffset', totalLength1)
-      .transition(t)
-      .attr('stroke-dashoffset', 0);
+      .attr('stroke-dashoffset', -totalLength1)
+      .transition(lineT)
+      .attr('stroke-dashoffset', 0)
+      .attr('stroke-antialiasing', 'true');
 
 
 
@@ -142,14 +157,14 @@ export default class UserDetail extends React.Component {
     let dots = d3.select('g').selectAll('dot').data(data)
     dots.enter().append("circle")
         .attr('class', 'point')
-        .attr("r", 3)
-        .attr("cx", d => x(d.date) )
+        .attr('r', 2.5)
+        .attr('cx', d => x(d.date) )
         .style('fill-opacity', 1e-6)
         .attr('cy', 0)
-        .on("mouseover", function (d) {
+        .on('mouseover', function (d) {
           d3.select(this).transition()
               .duration(120)
-              .attr('r', 4);
+              .attr('r', 3);
           div.transition()
              .duration(100)
              .style("opacity", .8)
@@ -161,7 +176,7 @@ export default class UserDetail extends React.Component {
         .on("mouseout", function (d) {
           d3.select(this).transition()
               .duration(120)
-              .attr('r', 3);
+              .attr('r', 2.5);
             div.transition()
                 .duration(300)
                 .style("opacity", 0)
@@ -171,6 +186,8 @@ export default class UserDetail extends React.Component {
         .attr("cy", d => y(d.elo) )
         .style('fill-opacity', 1)
   }
+
+
 
   componentDidMount () {
       // data = this.state.games.map( game => {
@@ -207,7 +224,7 @@ export default class UserDetail extends React.Component {
               .rangeRound([height, 0]);
 
       x.domain(d3.extent(data, d => d.date ));
-      y.domain([0, d3.max(data, d => d.elo ) + 100]);
+      y.domain([0, (Math.floor(d3.max(data, d => d.elo ) / 100) * 100) + 100]);
 
       let line = d3.line()
           .x( d => x(d.date) )
@@ -224,7 +241,8 @@ export default class UserDetail extends React.Component {
       .append("text")
         .attr("fill", "#333")
         .attr("transform", "rotate(-90)")
-        .attr("y", 6)
+        .attr("y", -50)
+        .attr('x', -90)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text("Elo");
@@ -247,14 +265,14 @@ export default class UserDetail extends React.Component {
         .data(data)
       .enter().append('circle')
         .attr('class', 'point')
-        .attr('r', 3)
+        .attr('r', 2.5)
         .attr('cx', d => x(d.date) )
         .attr('cy', 0)
         .attr('fill-opacity', 1e-6)
         .on('mouseover', function(d) {
           d3.select(this).transition()
               .duration(120)
-              .attr('r', 4);
+              .attr('r', 3);
           div.transition()
               .duration(100)
               .style('opacity', .8)
@@ -266,7 +284,7 @@ export default class UserDetail extends React.Component {
         .on("mouseout", function(d) {
             d3.select(this).transition()
                .duration(200)
-               .attr('r', 3);
+               .attr('r', 2.5);
             div.transition()
                 .duration(300)
                 .style("opacity", 0)
@@ -284,22 +302,23 @@ export default class UserDetail extends React.Component {
   componentWillReceiveProps (nextProps) {
     let id = parseInt(nextProps.params.id);
     services.getUser(id)
-    .then( user => this.setState({user}))
-
-    services.getGames(id)
-    .then( games => this.setState({games}))
+    .then( user => {
+      services.getGames(id)
+      .then( games => this.setState({user, games}))
+    })
   }
 
-  componentDidUpdate () {
-    if (this.state.user && this.state.games) {
-      this.updateGraph(this.state.games);
-    }
+  shouldComponentUpdate (nextProps, nextState) {
+    return nextState != this.state;
+  }
+
+  componentDidUpdate (prevState) {
+      this.updateGraph();
   }
 
   render () {
     if (this.state.games && this.state.user) {
-      this.updateGraph();
-      const games = this.getGames();
+      let games = this.getGames();
       return (
         <div className='container'>
           <div className='detail-name'>

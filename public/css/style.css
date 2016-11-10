@@ -43,18 +43,17 @@ button > a {
   min-height: 100%;
   box-sizing: border-box;
   -webkit-overflow-scrolling: touch;
-  /*position: absolute;*/
+  /*position: relative;*/
 }
-/*.transitionGroup {
-  position: relative;
-}*/
-.container {
-  /*position: absolute;*/
-  /*margin-left: auto;
-  margin-right: auto;
+/*.container {
+  position: absolute;
+  max-width: 650px;
   left: 0;
-  right: 0;*/
-}
+  right: 0;
+  padding-left: 20px;
+  padding-right: 20px;
+  background: white;
+}*/
 .ea-font {
   font-family: EASans;
   letter-spacing: 3px;
@@ -115,6 +114,8 @@ button > a {
 /*Match submission form*/
 .error {
   border: 1px solid red;
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
 }
 .submit-name > h1 {
   margin-bottom: 0px;
@@ -337,7 +338,13 @@ g > text {
     fill: none;
     stroke: #333;
     stroke-width: 1.5px;
-    shape-rendering: optimizeQuality;
+    shape-rendering: geometricPrecision;
+    /*stroke-antialiasing: true;*/
+}
+.point {
+  fill: #FF6700;
+  stroke: transparent;
+  stroke-width: 2px;
 }
 div.tooltip {
   position: absolute;
@@ -420,7 +427,25 @@ div.tooltip {
   transform: translate(100%);
   transition: all 200ms ease-in-out;
 }
+/*ANIMATIONS*/
+/*Error*/
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
 
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
 /*Spinner*/
 .spinner {
   margin: 100px auto;

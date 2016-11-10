@@ -16,11 +16,12 @@ export default class Leaderboard extends React.Component {
         for (let i = 0; i < users.length; i++) {
           let user = users[i]
           services.getGames(user.id).then( games => {
-            user.games = games.reverse();
+            user.games = games;
             // console.log(user.games)
             user.oldScore = user.id === user.games[0].winner.id ? games[0].winner_score: games[0].loser_score;
             user.newScore = user.id === user.games[1].winner.id ? user.games[1].winner_score: user.games[1].loser_score;
             users[i] = user
+            console.log(user)
           })
           this.setState({users})
       }});
@@ -49,7 +50,7 @@ export default class Leaderboard extends React.Component {
   getLeaderboardItems () {
     const users = this.state.users;
     const startOpacity = 0;
-    const startY = 100;
+    const startY = 80;
     const defaultStyles = users.map( () => { return {o: startOpacity, y: startY} });
     const springParams = {stiffness: 190, damping: 22};
 
