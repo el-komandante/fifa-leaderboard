@@ -9,10 +9,15 @@ export default class Leaderboard extends React.Component {
   constructor() {
     super();
     this.state = {
-      users: null
+      users: null,
+      sort: 'elo-desc'
     };
     services.getUsers()
       .then(users => {
+        users = users.map( (user, i) => {
+          user.rank = i+1;
+          return user;
+        });
         for (let i = 0; i < users.length; i++) {
           let user = users[i]
           services.getGames(user.id).then( games => {
@@ -66,7 +71,7 @@ export default class Leaderboard extends React.Component {
         <div>
           {interpolatingStyles.map((style, i) =>
             <div key={i} className='row' style={{opacity: style.o, transform: `translateY(${style.y}px)`}}>
-              <div className='leaderboard-item position'>{i + 1}</div>
+              <div className='leaderboard-item position'>{users[i].rank}</div>
               <div className='leaderboard-item name'><a className='name' href={`./#/users/${users[i].id}`}>{users[i].name}</a></div>
               <div className='leaderboard-item wins'>{users[i].wins}</div>
               <div className='leaderboard-item losses'>{users[i].losses}</div>
@@ -88,6 +93,138 @@ export default class Leaderboard extends React.Component {
     )
   }
 
+  handleNameSort () {
+    if (this.state.sort != 'name-desc') {
+      const sorted = this.state.users.sort( (a, b) => {
+        if (a.name < b.name) {
+          return -1;
+        }
+        if (a.name > b.name) {
+          return 1;
+        }
+        return 0;
+      });
+      this.setState({
+        users: sorted,
+        sort: 'name-desc'
+      });
+    }
+    else if (this.state.sort === 'name-desc') {
+      const sorted = this.state.users.sort ( (a, b) => {
+        if (a.name < b.name) {
+          return 1;
+        }
+        if (a.name > b.name) {
+          return -1;
+        }
+        return 0;
+      });
+      this.setState({
+        users: sorted,
+        sort: 'name-asc'
+      });
+    }
+  }
+
+  handleEloSort () {
+    if (this.state.sort != 'elo-desc') {
+      const sorted = this.state.users.sort( (a, b) => {
+        if (a.score < b.score) {
+          return 1;
+        }
+        if (a.score > b.score) {
+          return -1;
+        }
+        return 0;
+      });
+      this.setState({
+        users: sorted,
+        sort: 'elo-desc'
+      });
+    }
+    else if (this.state.sort === 'elo-desc') {
+      const sorted = this.state.users.sort( (a, b) => {
+        if (a.score < b.score) {
+          return -1;
+        }
+        if (a.score > b.score) {
+          return 1;
+        }
+        return 0;
+      });
+      this.setState({
+        users: sorted,
+        sort: 'elo-asc'
+      });
+    }
+  }
+
+  handleWinSort () {
+    if (this.state.sort != 'win-desc') {
+      const sorted = this.state.users.sort( (a, b) => {
+        if (a.wins < b.wins) {
+          return 1;
+        }
+        if (a.wins > b.wins) {
+          return -1;
+        }
+        return 0;
+      });
+      this.setState({
+        users: sorted,
+        sort: 'win-desc'
+      });
+    }
+    else if (this.state.sort === 'win-desc') {
+      const sorted = this.state.users.sort ( (a, b) => {
+        if (a.wins < b.wins) {
+          return -1;
+        }
+        if (a.wins > b.wins) {
+          return 1;
+        }
+        return 0;
+      });
+      this.setState({
+        users: sorted,
+        sort: 'win-asc'
+      });
+    }
+  }
+
+  handleLoseSort () {
+    if (this.state.sort != 'lose-desc') {
+      const sorted = this.state.users.sort( (a, b) => {
+        if (a.losses < b.losses) {
+          return 1;
+        }
+        if (a.losses > b.losses) {
+          return -1;
+        }
+        return 0;
+      });
+      this.setState({
+        users: sorted,
+        sort: 'lose-desc'
+      });
+    }
+    else if (this.state.sort === 'lose-desc') {
+      const sorted = this.state.users.sort( (a, b) => {
+        if (a.losses < b.losses) {
+          return -1;
+        }
+        if (a.losses > b.losses) {
+          return 1;
+        }
+        return 0;
+      });
+      this.setState({
+        users: sorted,
+        sort: 'lose-asc'
+      });
+    }
+  }
+
   render () {
     if (this.state.users) {
       const leaderboardItems = this.getLeaderboardItems();
@@ -103,10 +240,10 @@ export default class Leaderboard extends React.Component {
             <h2 className='ea-font rankings'>RANKINGS</h2>
             <div className='leaderboard-header'>
               <div className='leaderboard-header-item position'></div>
-              <div className='leaderboard-header-item name'>Name</div>
-              <div className='leaderboard-header-item wins'>Wins</div>
-              <div className='leaderboard-header-item losses'>Losses</div>
-              <div className='leaderboard-header-item elo'>Elo</div>
+              <div className='leaderboard-header-item name' onClick={this.handleNameSort.bind(this)}>Name</div>
+              <div className='leaderboard-header-item wins' onClick={this.handleWinSort.bind(this)}>Wins</div>
+              <div className='leaderboard-header-item losses' onClick={this.handleLoseSort.bind(this)}>Losses</div>
+              <div className='leaderboard-header-item elo' onClick={this.handleEloSort.bind(this)}>Elo</div>
               <div className='leaderboard-header-item one-week'></div>
             </div>
           </div>
