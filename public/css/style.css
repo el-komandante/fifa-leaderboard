@@ -1,3 +1,10 @@
+/*Colors:
+*Main Orange: #ff5500
+*Shadow Orange: #d04702
+*Dark Grey: #333
+*
+*/
+
 @media (max-width: 600px) {
   .score .score-input {
     width: 70%;
@@ -117,6 +124,9 @@ button > a {
   animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
   transform: translate3d(0, 0, 0);
 }
+.shake {
+
+}
 .submit-name > h1 {
   margin-bottom: 0px;
 }
@@ -217,7 +227,6 @@ button > a {
   font-size: 1.5em;
   width: 30%;
   text-align: center;
-  /*transition: all .2s ease-in-out;*/
   flex-grow: 1;
   flex-basis: none;
 }
@@ -281,6 +290,10 @@ button > a {
   text-decoration: none;
   color: #333;
 }
+.leaderboard-header-item > a {
+  text-decoration: none;
+  color: white;
+}
 .wins {
   flex-grow: 1.2;
 }
@@ -342,7 +355,7 @@ g > text {
     /*stroke-antialiasing: true;*/
 }
 .point {
-  fill: #FF6700;
+  fill: #333;
   stroke: transparent;
   stroke-width: 2px;
 }
@@ -447,55 +460,18 @@ div.tooltip {
   }
 }
 /*Spinner*/
-.spinner {
-  margin: 100px auto;
-  width: 50px;
-  height: 40px;
-  text-align: center;
-  font-size: 10px;
+.loader {
+  border: 3px solid #f8f8f8; /* Light grey */
+  border-top: 3px solid #ff5500;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  animation: spin .7s linear infinite;
+  margin: 0 auto;
+  margin-top: 30px;
 }
 
-.spinner > div {
-  background-color: #333;
-  height: 100%;
-  width: 6px;
-  display: inline-block;
-
-  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
-  animation: sk-stretchdelay 1.2s infinite ease-in-out;
-}
-
-.spinner .rect2 {
-  -webkit-animation-delay: -1.1s;
-  animation-delay: -1.1s;
-}
-
-.spinner .rect3 {
-  -webkit-animation-delay: -1.0s;
-  animation-delay: -1.0s;
-}
-
-.spinner .rect4 {
-  -webkit-animation-delay: -0.9s;
-  animation-delay: -0.9s;
-}
-
-.spinner .rect5 {
-  -webkit-animation-delay: -0.8s;
-  animation-delay: -0.8s;
-}
-
-@-webkit-keyframes sk-stretchdelay {
-  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
-  20% { -webkit-transform: scaleY(1.0) }
-}
-
-@keyframes sk-stretchdelay {
-  0%, 40%, 100% {
-    transform: scaleY(0.4);
-    -webkit-transform: scaleY(0.4);
-  }  20% {
-    transform: scaleY(1.0);
-    -webkit-transform: scaleY(1.0);
-  }
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

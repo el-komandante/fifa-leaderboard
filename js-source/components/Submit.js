@@ -1,11 +1,11 @@
 /* jshint esversion: 6 */
-import React from 'react';
-import * as services from '../api-services/apiService';
-import { IndexLink } from 'react-router';
+import React from 'react'
+import * as services from '../api-services/apiService'
+import { IndexLink } from 'react-router'
 
 export default class SubmitResult extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       winner_id: 1,
       loser_id: 1,
@@ -14,25 +14,33 @@ export default class SubmitResult extends React.Component {
       users: [],
       goalError: false,
       playerError: false
-    };
+    }
     services.getUsers()
     .then(users => {
-      // users.reverse();
-      console.log(users);
-      this.setState({users});
+      users = users.sort( (a, b) => {
+        if (a.id < b.id) {
+          return -1
+        }
+        if (a.id > b.id) {
+          return 1
+        }
+        return 0
+      })
+      console.log(users)
+      this.setState({users})
     })
   }
 
   getOptions () {
     let users = this.state.users.map( (user, i) => {
-      return <option key={user} data-id={user.id} key={i}>{user.name}</option>;
-    });
-    return users;
+      return <option key={user} data-id={user.id} key={i}>{user.name}</option>
+    })
+    return users
   }
 
   handleSubmit (e) {
-    let goalError = false;
-    let playerError = false;
+    let goalError = false
+    let playerError = false
     let game = {
       winner_goals: this.state.winner_goals,
       loser_goals: this.state.loser_goals,
@@ -40,60 +48,60 @@ export default class SubmitResult extends React.Component {
       loser_id: this.state.loser_id
     }
     if (game.winner_goals < game.loser_goals) {
-      goalError = true;
-      this.setState({goalError: true});
+      goalError = true
+      this.setState({goalError: true})
     }
     else if (game.winner_goals >= game.loser_goals) {
-      goalError = false;
-      this.setState({goalError: false});
+      goalError = false
+      this.setState({goalError: false})
     }
 
     if (game.winner_id === game.loser_id) {
-      playerError = true;
-      this.setState({playerError: true});
+      playerError = true
+      this.setState({playerError: true})
     }
     else if (game.winner_id != game.loser_id) {
-      playerError = false;
-      this.setState({playerError: false});
+      playerError = false
+      this.setState({playerError: false})
     }
 
     if (!goalError && !playerError) {
-      services.submitGame(game);
-      console.log(game);
-      this.context.router.push('/');
+      services.submitGame(game)
+      console.log(game)
+      this.context.router.push('/')
     }
   }
 
   handleWinnerChange (e) {
-    let value = +e.target.options[e.target.selectedIndex].dataset.id;
+    let value = +e.target.options[e.target.selectedIndex].dataset.id
     this.setState({
       winner_id: value
-    });
+    })
   }
 
   handleLoserChange (e) {
-    let value = +e.target.options[e.target.selectedIndex].dataset.id;
+    let value = +e.target.options[e.target.selectedIndex].dataset.id
     this.setState({
       loser_id: value
-    });
+    })
   }
 
   handleWinScoreChange (e) {
-    let value = parseInt(e.target.value) || 0;
+    let value = parseInt(e.target.value) || 0
     this.setState({
       winner_goals: value
-    });
+    })
   }
 
   handleLoseScoreChange (e) {
-    let value = parseInt(e.target.value) || 0;
+    let value = parseInt(e.target.value) || 0
     this.setState({
       loser_goals: value
-    });
+    })
   }
 
   render () {
-    let options = this.getOptions();
+    let options = this.getOptions()
     return (
         <div className='container'>
           <div className='submit-name'>
@@ -145,10 +153,10 @@ export default class SubmitResult extends React.Component {
           </div>
           <button className='submit-button' onClick={this.handleSubmit.bind(this)}>SUBMIT</button>
         </div>
-    );
+    )
   }
 }
 
 SubmitResult.contextTypes = {
    router: React.PropTypes.object.isRequired
- };
+ }
