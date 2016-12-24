@@ -28,7 +28,7 @@ export default class UserDetail extends React.Component {
 
   getGames () {
     const games = this.state.games.length >= 5 ? this.state.games.reverse().slice(0,5): this.state.games.reverse().slice(0, this.state.games.length)
-    console.log(games)
+    // console.log(games)
     const user = this.state.user
     const startOpacity = 0
     const startY = 100
@@ -77,7 +77,7 @@ export default class UserDetail extends React.Component {
   }
 
   updateGraph () {
-    const margin = {top: 20, right: 20, bottom: 20, left: 50}
+    const margin = {top: 20, right: 20, bottom: 70, left: 50}
     const width = 400 - margin.left - margin.right
     const height = 300 - margin.top - margin.bottom
 
@@ -88,7 +88,7 @@ export default class UserDetail extends React.Component {
     const data = this.state.games.map( game => {
       return {
         elo: this.state.user.id === game.loser.id ? game.winner_score : game.loser_score,
-        date: new Date(1000*game.date)
+        date: new Date(1000 * game.date)
       }
     })
 
@@ -106,22 +106,19 @@ export default class UserDetail extends React.Component {
     let svg = d3.select('svg')
     let div = d3.select('.elo-chart div')
     let g = svg.select('g')
-    let xAxis = d3.select('axis--x')
-
-    // xAxis.ticks(10)
-    //     .selectAll('text')
-    //      .style('text-anchor', 'end')
-    //      .attr("dx", "-.8em")
-    //      .attr("dy", ".15em")
-    //      .attr('transform', 'rotate(-65)')
-
 
     const t = d3.transition().duration(500)
     const lineT = d3.transition().duration(500)
-
+    let transitioning = false
     const trans0 = svg.transition(t)
+
     trans0.selectAll('.axis--y').call(d3.axisLeft(y))
-    trans0.selectAll('.axis--x').call(d3.axisBottom(x))
+    trans0.selectAll('.axis--x').call(d3.axisBottom(x).ticks(6).tickFormat(d3.timeFormat("%m/%d/%y")))
+    .selectAll("text")
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-65)")
 
     let path0 = d3.select('.line')
     let totalLength0 = path0.node().getTotalLength()
@@ -129,7 +126,7 @@ export default class UserDetail extends React.Component {
     path0.attr('stroke-dasharray', totalLength0)
       .attr('stroke-dashoffset', 0)
       .transition()
-      .duration(450)
+      .duration(200)
       .attr('stroke-dashoffset', -totalLength0)
       .remove()
 
@@ -203,7 +200,7 @@ export default class UserDetail extends React.Component {
 
       data = data.map( d => { return {elo: +d.elo, date: new Date(d.date * 1000)} } )
 
-      let margin = {top: 20, right: 20, bottom: 20, left: 50}
+      let margin = {top: 20, right: 20, bottom: 70, left: 50}
       let width = 400 - margin.left - margin.right
       let height = 300 - margin.top - margin.bottom
 
@@ -234,7 +231,13 @@ export default class UserDetail extends React.Component {
       g.append('g')
         .attr('class', 'axis axis--x')
         .attr('transform', 'translate(0,' + height + ')')
-        .call(d3.axisBottom(x))
+        .call(d3.axisBottom(x).ticks(6).tickFormat(d3.timeFormat("%m/%d/%y")))
+        .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", "rotate(-65)")
+
 
       g.append("g")
         .attr("class", "axis axis--y")
@@ -307,7 +310,7 @@ export default class UserDetail extends React.Component {
       services.getGames(id)
       .then( games => {
         this.setState({user, games})
-        console.log(games)
+        // console.log(games)
       })
     })
   }

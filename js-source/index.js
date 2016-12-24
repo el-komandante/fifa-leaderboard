@@ -10,10 +10,10 @@ import App from './components/App';
 render(
   (
     <Router history={hashHistory}>
-      <Route path='/' component={App}>
-        <IndexRoute component={Leaderboard}/>
-        <Route path='submit' component={SubmitResult}/>
-        <Route path='/users/:id' component={UserDetail}/>
+      <Route path='/' component={ App }>
+        <IndexRoute component={ Leaderboard}/>
+        <Route path='submit' component={ SubmitResult }/>
+        <Route path='/users/:id' component={ UserDetail }/>
       </Route>
     </Router>
   ),
