@@ -3,7 +3,7 @@ import React from 'react'
 import * as services from '../api-services/apiService'
 import { IndexLink } from 'react-router'
 
-export default class SubmitResult extends React.Component {
+export default class Submit extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -157,6 +157,6 @@ export default class SubmitResult extends React.Component {
   }
 }
 
-SubmitResult.contextTypes = {
+Submit.contextTypes = {
    router: React.PropTypes.object.isRequired
  }
