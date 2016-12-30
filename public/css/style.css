@@ -284,15 +284,16 @@ button > a {
 .checkbox {
   flex-grow: .3;
 }
-/*.checked {
+.row.checked {
   margin-left: -3.5%;
   box-shadow: 0px 20px 20px -20px rgba(0,0,0,0.5),
               0px -20px 20px -20px rgba(0,0,0,0.5);
   z-index: 300;
 }
-.checked + .checked {
-  box-shadow: 0px 20px 20px -20px rgba(0,0,0,0.5) !important;
-}*/
+.row.checked + .checked {
+  box-shadow: 0px 20px 20px -20px rgba(0,0,0,0.5),
+  0px -20px 20px -20px rgba(0,0,0,0.0) !important;
+}
 .leaderboard {
   width: 100%;
   margin-top: 45px;
@@ -350,6 +351,8 @@ button > a {
 }
 .row {
   background: #e2e2e2;
+  box-shadow: none;
+  transition: box-shadow .1s ease-in-out;
 }
 .row:nth-child(even) {
   background: #f8f8f8;
