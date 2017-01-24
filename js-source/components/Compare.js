@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import { IndexLink, Link } from 'react-router'
 import Loader from './Loader'
 import * as services from '../api-services/apiService'
+import * as d3 from 'd3'
 import moment from 'moment'
 import { StaggeredMotion, spring } from 'react-motion'
 
@@ -33,7 +34,115 @@ export default class Compare extends Component {
         games: this.state.games.concat(games)
       }))
     })
+  }
+  componentDidMount() {
+    let data = []
+    let parseTime = d3.timeParse('%m/%d/%Y')
+    let formatTime = d3.timeFormat('%m/%d/%Y')
 
+    data = data.map( d => { return {elo: +d.elo, date: new Date(d.date * 1000)} } )
+
+    let margin = {top: 20, right: 20, bottom: 70, left: 50}
+    let width = 400 - margin.left - margin.right
+    let height = 300 - margin.top - margin.bottom
+
+    let div = d3.select('.left-chart').append('div')
+        .attr('class', 'tooltip')
+        .style('opacity', 0)
+
+    let svg = d3.select('.left-chart').append('svg')
+        .attr('viewBox', '0 0 400 300')
+        .attr('preserveAspectRatio', 'xMidYMid meet')
+
+    let g = svg.append('g')
+            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+
+    let x = d3.scaleTime()
+            .rangeRound([0, width])
+
+    let y = d3.scaleLinear()
+            .rangeRound([height, 0])
+
+    x.domain(d3.extent(data, d => d.date ))
+    y.domain([0, (Math.floor(d3.max(data, d => d.elo ) / 100) * 100) + 100])
+
+    let line = d3.line()
+        .x( d => x(d.date) )
+        .y( d => y(d.elo) )
+
+    g.append('g')
+      .attr('class', 'axis axis--x')
+      .attr('transform', 'translate(0,' + height + ')')
+      .call(d3.axisBottom(x).ticks(6).tickFormat(d3.timeFormat("%m/%d/%y")))
+      .selectAll("text")
+          .style("text-anchor", "end")
+          .attr("dx", "-.8em")
+          .attr("dy", ".15em")
+          .attr("transform", "rotate(-65)")
+
+
+    g.append("g")
+      .attr("class", "axis axis--y")
+      .call(d3.axisLeft(y))
+    .append("text")
+      .attr("fill", "#333")
+      .attr("transform", "rotate(-90)")
+      .attr("y", -50)
+      .attr('x', -90)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Elo")
+
+    let path = g.append('path')
+                 .datum(data)
+                 .attr('class', 'line')
+                 .attr('d', line)
+
+    // let totalLength = path.node().getTotalLength()
+    //
+    // path.attr('stroke-dasharray', totalLength + ' ' + totalLength)
+    // 	.attr('stroke-dashoffset', totalLength)
+    //   .transition()
+    // 	.duration(1000)
+    // 	.attr('stroke-dashoffset', 0)
+
+
+    g.selectAll('dot')
+      .data(data)
+    .enter().append('circle')
+      .attr('class', 'point')
+      .attr('r', 2.5)
+      .attr('cx', d => x(d.date) )
+      .attr('cy', 0)
+      .attr('fill-opacity', 1e-6)
+      .on('mouseover', function(d) {
+        d3.select(this).transition()
+            .duration(120)
+            .attr('r', 3)
+        div.transition()
+            .duration(100)
+            .style('opacity', .8)
+            .style('top', (d3.event.pageY - 50) + "px")
+        div.html('&nbsp&nbsp' + formatTime(d.date) + ", "  + d.elo + '&nbsp&nbsp')
+            .style('left', (d3.event.pageX - 70) + "px")
+            .style('top', (d3.event.pageY - 31) + "px")
+        })
+      .on("mouseout", function(d) {
+          d3.select(this).transition()
+             .duration(200)
+             .attr('r', 2.5)
+          div.transition()
+              .duration(300)
+              .style("opacity", 0)
+              .style('top', (parseFloat(div.style('top')) + 20) + 'px')
+              // .style("top", (d3.event.pageY - 50) + "px")
+      })
+      .transition()
+      .duration(700)
+      .delay(400)
+      // .delay( (d, i) => i * Math.random() *100 )
+      .attr("cy", d => y(d.elo) )
+      .style('fill-opacity', 1)
   }
   getRows () {
     const { users } = this.state
@@ -105,13 +214,16 @@ export default class Compare extends Component {
             </IndexLink>
           </h2>
         </div>
+        <div className="compare-charts">
+          <div className="left-chart"></div>
+        </div>
         <div className='compare-header'>
           <div className='compare-header-item recent-game-result'>Winner</div>
           <div className='compare-header-item recent-game-vs'>Loser</div>
           <div className='compare-header-item recent-game-score'>Score</div>
           <div className='compare-header-item recent-game-date'>Date</div>
         </div>
-        {this.getRows()}
+        { this.getRows() }
       </div>
     )
   }

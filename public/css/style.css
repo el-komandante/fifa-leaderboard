@@ -449,6 +449,10 @@ div.tooltip {
     color: #333;
 }
 /*COMPARE*/
+.compare-charts {
+  max-height: 400px;
+  margin: 0 auto;
+}
 .compare-header {
   color: white;
   background: rgb(255, 85, 0);
