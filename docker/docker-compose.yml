@@ -1,0 +1,17 @@
+version: '2'
+services:
+  postgres:
+    image: "elkomandante/fifa-app-postgres"
+    ports:
+    - "5432"
+    environment:
+    - POSTGRES_PASSWORD=postgres
+    volumes:
+    - data:/var/lib/postgres
+  fifa-app-api:
+    image: "elkomandante/fifa-app-api"
+    ports:
+    - "3002:3002"
+volumes:
+  data:
+    driver: "local"
