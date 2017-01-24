@@ -73,40 +73,49 @@ export default class Leaderboard extends React.Component {
     const selectedHeight = 50
     const startShadow = 0
     const selectedShadow = 0.5
-    const defaultStyles = users.map( () => { return {o: startOpacity, y: startY, width: startWidth, height: startHeight, marginLeft: startMargin, boxShadow: '0px 20px 20px -20px rgba(0,0,0,0.0), 0px -20px 20px -20px rgba(0,0,0,0.0)'}})
+    const defaultStyles = users.map( () => {
+      return {
+        o: startOpacity,
+        y: startY,
+        width: startWidth,
+        height: startHeight,
+        marginLeft: startMargin,
+        boxShadow: '0px 20px 20px -20px rgba(0,0,0,0.0), 0px -20px 20px -20px rgba(0,0,0,0.0)'
+      }
+    })
     const springParams = {stiffness: 220, damping: 24}
     const heightSpringParams = {stiffness: 200, damping: 20}
     const widthSpringParams = {stiffness: 300, damping: 20}
     return (
       <StaggeredMotion
         defaultStyles={ defaultStyles }
-        styles={prevInterpolatedStyles => prevInterpolatedStyles.map((_, i) => {
+        styles={ prevInterpolatedStyles => prevInterpolatedStyles.map((_, i) => {
           const { users } = this.state
           const isChecked = this.isChecked(users[i].id)
           return i === 0
             ? {
                 o: spring(1, springParams),
                 y: spring(0, springParams),
-                marginLeft: (isChecked ? spring(selectedMargin, widthSpringParams) : spring(startMargin, widthSpringParams)),
-                width: (isChecked ? spring(selectedWidth, widthSpringParams) : spring(startWidth, widthSpringParams)),
-                height: (isChecked ? spring(selectedHeight, heightSpringParams) : spring(startHeight, heightSpringParams)),
+                marginLeft: isChecked ? spring(selectedMargin, widthSpringParams) : spring(startMargin, widthSpringParams),
+                width: isChecked ? spring(selectedWidth, widthSpringParams) : spring(startWidth, widthSpringParams),
+                height: isChecked ? spring(selectedHeight, heightSpringParams) : spring(startHeight, heightSpringParams),
                 shadow: isChecked ? spring(selectedShadow) : spring(startShadow)
               }
             : {
                 o: spring(prevInterpolatedStyles[i - 1].o),
                 y: spring(prevInterpolatedStyles[i - 1].y, springParams),
-                marginLeft: (isChecked ? spring(selectedMargin, widthSpringParams) : spring(startMargin, widthSpringParams)),
-                width: (isChecked ? spring(selectedWidth, widthSpringParams) : spring(startWidth, widthSpringParams)),
-                height: (isChecked ? spring(selectedHeight, heightSpringParams) : spring(startHeight, heightSpringParams)),
+                marginLeft: isChecked ? spring(selectedMargin, widthSpringParams) : spring(startMargin, widthSpringParams),
+                width: isChecked ? spring(selectedWidth, widthSpringParams) : spring(startWidth, widthSpringParams),
+                height: isChecked ? spring(selectedHeight, heightSpringParams) : spring(startHeight, heightSpringParams),
                 shadow: isChecked ? spring(selectedShadow) : spring(startShadow)
               }
-      })}>
-      {interpolatingStyles =>
+      }) }>
+      { interpolatingStyles =>
         <div>
           {interpolatingStyles.map((style, i) => {
             const isChecked = this.isChecked(users[i].id)
             return (
-              <div key={i} className={isChecked ? 'row checked' : 'row'} style={{opacity: style.o, transform: `translate(0%, ${style.y}px)`, width: `${style.width}%`, height: style.height, marginLeft: `${style.marginLeft}%`, /*boxShadow: `0px 20px 20px -20px rgba(0,0,0,0.${style.shadow}), 0px -20px 20px -20px rgba(0,0,0,0.${style.shadow})`*/}}>
+              <div key={i} className={isChecked ? 'row checked' : 'row'} style={ {opacity: style.o, transform: `translate(0%, ${style.y}px)`, width: `${style.width}%`, height: style.height, marginLeft: `${style.marginLeft}%`, /*boxShadow: `0px 20px 20px -20px rgba(0,0,0,0.${style.shadow}), 0px -20px 20px -20px rgba(0,0,0,0.${style.shadow})`*/} }>
                 <div className={'leaderboard-item checkbox'}><input type='checkbox' value={users[i].id} onClick={this.handleClick.bind(this)} /></div>
                 <div className='leaderboard-item position'>{users[i].rank}</div>
                 <div className='leaderboard-item name'><a className='name' href={`./#/users/${users[i].id}`}>{users[i].name}</a></div>
@@ -124,7 +133,7 @@ export default class Leaderboard extends React.Component {
                 </div>
               </div>
             )
-          })}
+          }) }
         </div>
       }
     </StaggeredMotion>

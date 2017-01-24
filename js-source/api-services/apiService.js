@@ -8,25 +8,25 @@ const instance = axios.create({
   timeout: 10000
 });
 
-function getUsers () {
+const getUsers = () => {
   return instance.get('/users')
   .then( response => { return response.data; } )
   .catch( error => console.error(error) );
 }
 
-function getUser (id) {
+const getUser = (id) => {
   return instance.get(`/users/${id}`)
   .then( response => { return response.data; } )
   .catch( error => console.error(error) );
 }
 // Games are returned with the winner_score and loser_score reversed
-function getGames (id) {
+const getGames = (id) => {
   return instance.get(`/users/${id}/games`)
   .then( response => { return response.data; } )
   .catch( error => console.error(error) );
 }
 
-function submitGame (game) {
+const submitGame = (game) => {
   instance.post('/games', game)
   .then( response => { return response.data; })
   .catch( error => console.error(error) );
