@@ -104,12 +104,12 @@ button > a {
   font-weight: 800;
 }
 .submit-result:hover {
-  margin-top: 2px;
-  border-bottom-width: 2px;
+  margin-top: 1.5px;
+  border-bottom-width: 2.5px;
   /*margin-bottom: px;*/
 }
 .submit-result:active {
-  margin-top: 4px;
+  margin-top: 3.5px;
   border-bottom-width: 0px;
 }
 .submit-result > a, .sumbit-result > a:hover {
@@ -254,7 +254,25 @@ button > a {
   width: 40%;
   font-size: 1.2em;
 }
-
+.submit-success {
+  position: fixed;
+  margin: 0 auto;
+  width: 25%;
+  height: 25%;
+  text-align: center;
+  left: 0;
+  right: 0;
+  top: 25%;
+  z-index: 10;
+  background: white;
+  pointer-events: none;
+  display: table;
+  border: 4px solid black;
+}
+.submit-success h3 {
+  display: table-cell;
+  vertical-align: middle;
+}
 /*Leaderboard*/
 .leaderboard {
   width: 100%;

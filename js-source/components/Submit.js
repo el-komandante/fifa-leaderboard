@@ -2,6 +2,7 @@
 import React from 'react'
 import * as services from '../api-services/apiService'
 import { IndexLink } from 'react-router'
+import { Motion, spring } from 'react-motion'
 
 export default class SubmitResult extends React.Component {
   constructor(props) {
@@ -13,7 +14,8 @@ export default class SubmitResult extends React.Component {
       loser_goals: 0,
       users: [],
       goalError: false,
-      playerError: false
+      playerError: false,
+      isSubmitted: false
     }
     services.getUsers()
     .then(users => {
@@ -67,9 +69,15 @@ export default class SubmitResult extends React.Component {
 
     if (!goalError && !playerError) {
       services.submitGame(game)
-      console.log(game)
-      this.context.router.push('/')
+      this.setState({
+        isSubmitted: true
+      }, setTimeout(
+        () => {this.context.router.push('/')},
+        1500
+      ))
     }
+    console.log(game)
+
   }
 
   handleWinnerChange (e) {
@@ -102,6 +110,11 @@ export default class SubmitResult extends React.Component {
 
   render () {
     let options = this.getOptions()
+    const { isSubmitted } = this.state
+    const startO = 0
+    const endO = isSubmitted ? 1 : 0
+    const startY = 150
+    const endY = isSubmitted ? 0 : 150
     return (
         <div className='container'>
           <div className='submit-name'>
@@ -152,6 +165,14 @@ export default class SubmitResult extends React.Component {
             </div>
           </div>
           <button className='submit-button' onClick={this.handleSubmit.bind(this)}>SUBMIT</button>
+          <Motion defaultStyle={ {o: startO, y: startY} } style={ {o: spring(endO), y: spring(endY)} }>
+            { style => (
+                <div className="submit-success" style={ {opacity: style.o, transform: `translateY(${style.y}%)`} }>
+                  <h3>Nice!</h3>
+                </div>
+              )
+            }
+          </Motion>
         </div>
     )
   }

@@ -12,6 +12,8 @@ export default class Leaderboard extends React.Component {
       users: null,
       sort: 'elo-desc'
     }
+  }
+  componentDidMount() {
     services.getUsers()
       .then(users => {
         users = users.map( (user, i) => {
@@ -31,9 +33,7 @@ export default class Leaderboard extends React.Component {
           })
           this.setState({users})
       }})
-
   }
-
   getLeaderboardItems () {
     const users = this.state.users
     const startOpacity = 0
