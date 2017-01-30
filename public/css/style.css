@@ -104,12 +104,12 @@ button > a {
   font-weight: 800;
 }
 .submit-result:hover {
-  margin-top: 1.5px;
+  margin-top: 2px;
   border-bottom-width: 2.5px;
   /*margin-bottom: px;*/
 }
 .submit-result:active {
-  margin-top: 3.5px;
+  margin-top: 4px;
   border-bottom-width: 0px;
 }
 .submit-result > a, .sumbit-result > a:hover {
