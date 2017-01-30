@@ -12,9 +12,11 @@ export default class SubmitResult extends React.Component {
       loser_id: 1,
       winner_goals: 0,
       loser_goals: 0,
+      password: '',
       users: [],
       goalError: false,
       playerError: false,
+      pwError: false,
       isSubmitted: false
     }
     services.getUsers()
@@ -68,15 +70,27 @@ export default class SubmitResult extends React.Component {
     }
 
     if (!goalError && !playerError) {
-      services.submitGame(game)
-      this.setState({
-        isSubmitted: true
-      }, setTimeout(
-        () => {this.context.router.push('/')},
-        1500
-      ))
+      services.submitGame(game, this.state.password)
+      .then(response => {
+          this.setState({
+            isSubmitted: true,
+            pwError: false
+          }, setTimeout(
+            () => {this.context.router.push('/')},
+            1500
+          ))
+      })
+      .catch(err => {
+        if (err.response.status === 401) {
+          this.setState({
+            pwError: true
+          })
+        } else {
+          console.error(err)
+        }
+      })
     }
-    console.log(game)
+    // console.log(game)
 
   }
 
@@ -108,6 +122,12 @@ export default class SubmitResult extends React.Component {
     })
   }
 
+  handlePasswordChange(e) {
+    let value = e.target.value || ''
+    this.setState({
+      password: value
+    })
+  }
   render () {
     let options = this.getOptions()
     const { isSubmitted } = this.state
@@ -163,6 +183,10 @@ export default class SubmitResult extends React.Component {
                 {this.getOptions()}
               </select>
             </div>
+          </div>
+          <div className="password-container">
+            <h3 className="password-header">Password</h3>
+            <input type="text" className={this.state.pwError ? 'password error' : 'password'} onChange={ this.handlePasswordChange.bind(this) }/>
           </div>
           <button className='submit-button' onClick={this.handleSubmit.bind(this)}>SUBMIT</button>
           <Motion defaultStyle={ {o: startO, y: startY} } style={ {o: spring(endO), y: spring(endY)} }>

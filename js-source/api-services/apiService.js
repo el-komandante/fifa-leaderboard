@@ -26,9 +26,18 @@ function getGames (id) {
   .catch( error => console.error(error) );
 }
 
-function submitGame (game) {
-  instance.post('/games', game)
-  .then( response => { return response.data; })
-  .catch( error => console.error(error) );
+function submitGame (game, password) {
+  const config = {
+    method: 'post',
+    url: `${IP_ADDRESS}/games`,
+    data: game,
+    auth: {
+      username: ' ',
+      password
+    }
+  }
+  return axios(config)
+  .then( response => { return response })
+  // .catch( error => console.error(error) );
 }
 export { getUsers, getUser, getGames, submitGame };

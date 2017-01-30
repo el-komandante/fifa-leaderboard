@@ -9,7 +9,7 @@ services:
     volumes:
     - data:/var/lib/postgres
   fifa-app-api:
-    image: "elkomandante/fifa-app-api"
+    image: "elkomandante/fifa-api"
     ports:
     - "3002:3002"
 volumes:

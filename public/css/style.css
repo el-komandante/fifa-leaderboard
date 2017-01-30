@@ -254,6 +254,23 @@ button > a {
   width: 40%;
   font-size: 1.2em;
 }
+.password-container {
+  text-align: center;
+  padding-bottom: 3%;
+}
+.password-header {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.password {
+  width: 50%;
+  margin: 0 auto;
+  font-size: 1.7em;
+  text-align: center;
+}
+.password:focus {
+  outline: none;
+}
 .submit-success {
   position: fixed;
   margin: 0 auto;
