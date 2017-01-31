@@ -120,7 +120,7 @@ button > a {
 
 /*Match submission form*/
 .error {
-  border: 1px solid red;
+  border: 1px solid red !important;
   animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
   transform: translate3d(0, 0, 0);
 }
@@ -253,6 +253,22 @@ button > a {
 .winner-select > select, .loser-select > select {
   width: 40%;
   font-size: 1.2em;
+  /*border-radius: 0px !important;*/
+  background: white !important;
+  /*-webkit-appearance: none;*/
+  border: 0 !important;
+  outline: 1px inset black;
+  outline-offset: -1px;
+  padding: 7px;
+  text-align: center;
+  text-align-last: center;
+  /*border: 1px solid #333;*/
+}
+.winner-select > select:focus, .loser-select > select:focus {
+  outline: 1px inset #ff5500;
+  outline-offset: -1px;
+  /*border: 1px solid #ff5500;*/
+  box-shadow: 0 0 5px #d04702;
 }
 .password-container {
   text-align: center;
@@ -267,9 +283,12 @@ button > a {
   margin: 0 auto;
   font-size: 1.7em;
   text-align: center;
+  border: 1px solid #333;
 }
 .password:focus {
   outline: none;
+  border: 1px solid #ff5500;
+  box-shadow: 0 0 5px #d04702;
 }
 .submit-success {
   position: fixed;

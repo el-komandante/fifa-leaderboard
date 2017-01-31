@@ -30,7 +30,6 @@ export default class SubmitResult extends React.Component {
         }
         return 0
       })
-      console.log(users)
       this.setState({users})
     })
   }
@@ -90,8 +89,6 @@ export default class SubmitResult extends React.Component {
         }
       })
     }
-    // console.log(game)
-
   }
 
   handleWinnerChange (e) {
