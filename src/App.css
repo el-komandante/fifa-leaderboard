@@ -1,3 +1,30 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
+
+
 /*Colors:
 *Main Orange: #ff5500
 *Shadow Orange: #d04702
@@ -12,7 +39,7 @@
 }
 @font-face {
   font-family: EASans;
-  src: url(../fonts/EASansCurves-Regular.ttf);
+  src: url(./fonts/EASansCurves-Regular.ttf);
 }
 html {
   overflow-y: scroll;
@@ -25,7 +52,7 @@ body {
   background: #f2f2f2;
   margin: 0;
   color: #333;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Open Sans', sans-serif !important;
   /*height: 100%;*/
 }
 h1 {
@@ -37,6 +64,9 @@ h2 {
   margin-top: 5px;
   /*margin-top: 45px;*/
 }
+button {
+  font-family: 'Open Sans', sans-serif !important;
+}
 button > a {
   color: white;
   text-decoration: none;
@@ -46,8 +76,8 @@ button > a {
   max-width: 650px;
   background: white;
   padding: 20px;
-  /*height: 100vh;*/
-  min-height: 100%;
+  min-height: 100vh;
+  height: 100%;
   box-sizing: border-box;
   -webkit-overflow-scrolling: touch;
   /*position: relative;*/
@@ -164,6 +194,7 @@ button > a {
   font-weight: 800;
   border-bottom: solid 4px #d04702;
   margin-top: 0;
+  cursor: pointer;
 }
 .submit-button:hover {
   margin-top: 2px;
@@ -229,9 +260,14 @@ button > a {
   text-align: center;
   flex-grow: 1;
   flex-basis: none;
+  border: 1px solid #333;
+  box-shadow: 0 0 0px #d04702;
+  transition: all 0.1s ease;
 }
 .score-input:focus {
   outline: none;
+  border: 1px solid #ff5500;
+  box-shadow: 0 0 5px #d04702;
 }
 .connector {
   stroke: black;
@@ -250,25 +286,42 @@ button > a {
 .loser-select {
   margin-top: 0;
 }
-.winner-select > select, .loser-select > select {
-  width: 40%;
+label > select, label > select {
+  width: 50%;
   font-size: 1.2em;
-  /*border-radius: 0px !important;*/
+  border-radius: 0px !important;
   background: white !important;
-  /*-webkit-appearance: none;*/
-  border: 0 !important;
-  outline: 1px inset black;
-  outline-offset: -1px;
+  -webkit-appearance: none;
   padding: 7px;
   text-align: center;
   text-align-last: center;
-  /*border: 1px solid #333;*/
+  border: 1px solid #333;
+  position: relative;
+  height: 7%;
+  box-shadow: 0 0 0px #d04702;
+  transition: all 0.1s ease;
 }
-.winner-select > select:focus, .loser-select > select:focus {
-  outline: 1px inset #ff5500;
-  outline-offset: -1px;
-  /*border: 1px solid #ff5500;*/
+label > select:focus, label > select:focus {
+  /*outline: 1px inset #ff5500;
+  outline-offset: -1px;*/
+  outline: none;
+  border: 1px solid #ff5500;
   box-shadow: 0 0 5px #d04702;
+}
+label {
+  position: relative;
+  height: 100%;
+}
+label:after {
+    content: "\f078";
+    font-family: "FontAwesome";
+    font-size: 11px;
+    color: #333;
+    right: 8px;
+    top: 2px;
+    padding: 0 0 4px;
+    position: absolute;
+    pointer-events: none;
 }
 .password-container {
   text-align: center;
@@ -284,6 +337,8 @@ button > a {
   font-size: 1.7em;
   text-align: center;
   border: 1px solid #333;
+  box-shadow: 0 0 0px #d04702;
+  transition: all 0.1s ease;
 }
 .password:focus {
   outline: none;
@@ -293,7 +348,7 @@ button > a {
 .submit-success {
   position: fixed;
   margin: 0 auto;
-  width: 25%;
+  width: 55%;
   height: 25%;
   text-align: center;
   left: 0;
@@ -303,7 +358,7 @@ button > a {
   background: white;
   pointer-events: none;
   display: table;
-  border: 4px solid black;
+  border: 4px solid #333;
 }
 .submit-success h3 {
   display: table-cell;

@@ -149,9 +149,11 @@ export default class SubmitResult extends React.Component {
           <div className='form'>
             <div className='winner-select select'>
               <h2>Winner</h2>
-              <select className={this.state.playerError && 'error'} onChange={this.handleWinnerChange.bind(this)}>
-                {this.getOptions()}
-              </select>
+              <label>
+                <select className={this.state.playerError && 'error'} onChange={this.handleWinnerChange.bind(this)}>
+                  {this.getOptions()}
+                </select>
+              </label>
             </div>
             <div className='score-form'>
               <h2>Score</h2>
@@ -176,9 +178,11 @@ export default class SubmitResult extends React.Component {
             </div>
             <div className={'loser-select select'}>
               <h2>Loser</h2>
-              <select className={this.state.playerError && 'error'} onChange={this.handleLoserChange.bind(this)}>
-                {this.getOptions()}
-              </select>
+              <label>
+                <select className={this.state.playerError && 'error'} onChange={this.handleLoserChange.bind(this)}>
+                  {this.getOptions()}
+                </select>
+              </label>
             </div>
           </div>
           <div className="password-container">

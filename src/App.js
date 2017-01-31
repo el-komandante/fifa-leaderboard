@@ -1,9 +1,8 @@
-/* jshint esversion: 6 */
-import React from 'react'
-import { TransitionMotion, spring } from 'react-motion'
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
 
-
-export default class App extends React.Component {
+export default class App extends Component {
   render () {
     let path = this.props.location.pathname
     let segment = path.split('/')[1] || 'root'

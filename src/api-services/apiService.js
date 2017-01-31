@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 //Don't forget the 'http://'
-const IP_ADDRESS = 'http://localhost:3002';
+const IP_ADDRESS = 'https://fifa.rudydeberry.com';
 const instance = axios.create({
   baseURL: IP_ADDRESS,
   timeout: 10000
