@@ -135,7 +135,7 @@ button > a {
 }
 .submit-result:hover {
   margin-top: 2px;
-  border-bottom-width: 2.5px;
+  border-bottom-width: 2px;
   /*margin-bottom: px;*/
 }
 .submit-result:active {
