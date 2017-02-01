@@ -113,7 +113,7 @@ export default class UserDetail extends React.Component {
       const trans0 = svg.transition(t)
 
       trans0.selectAll('.axis--y').call(d3.axisLeft(y))
-      trans0.selectAll('.axis--x').call(d3.axisBottom(x).ticks(6).tickFormat(d3.timeFormat("%m/%d/%y")))
+      trans0.selectAll('.axis--x').call(d3.axisBottom(x).ticks(6).tickFormat(d3.timeFormat("%m/%d/%y\n%I:%M%p")))
       .selectAll("text")
           .style("text-anchor", "end")
           .attr("dx", "-.8em")
@@ -231,7 +231,7 @@ export default class UserDetail extends React.Component {
         g.append('g')
           .attr('class', 'axis axis--x')
           .attr('transform', 'translate(0,' + height + ')')
-          .call(d3.axisBottom(x).ticks(6).tickFormat(d3.timeFormat("%m/%d/%y")))
+          .call(d3.axisBottom(x).ticks(6).tickFormat(d3.timeFormat("%m/%d/%y%\n%I:%M%p")))
           .selectAll("text")
               .style("text-anchor", "end")
               .attr("dx", "-.8em")
