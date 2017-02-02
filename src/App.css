@@ -269,8 +269,15 @@ button > a {
 }
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
+  appearance: none;
+  -moz-appearance: none;
   -webkit-appearance: none;
   margin: 0;
+  text-indent: 0.01px;
+  text-overflow: '';
+}
+input[type=number] {
+    -moz-appearance: textfield;
 }
 .connector {
   stroke: black;
@@ -295,6 +302,8 @@ label > select, label > select {
   border-radius: 0px !important;
   background: white !important;
   -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
   padding: 7px;
   text-align: center;
   text-align-last: center;
@@ -342,6 +351,7 @@ label:after {
   border: 1px solid #333;
   box-shadow: 0 0 0px #d04702;
   transition: all 0.1s ease;
+  font-family: inherit;
 }
 .password:focus {
   outline: none;
