@@ -28,7 +28,6 @@ export default class UserDetail extends React.Component {
 
   getGames () {
     const games = this.state.games.length >= 5 ? this.state.games.reverse().slice(0,5): this.state.games.reverse().slice(0, this.state.games.length)
-    console.log(games)
     const user = this.state.user
     const startOpacity = 0
     const startY = 100
@@ -309,7 +308,6 @@ export default class UserDetail extends React.Component {
       services.getGames(id)
       .then( games => {
         this.setState({user, games})
-        console.log(games)
       })
     })
   }

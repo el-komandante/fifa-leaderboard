@@ -10,8 +10,8 @@ export default class SubmitResult extends React.Component {
     this.state = {
       winner_id: 1,
       loser_id: 1,
-      winner_goals: 0,
-      loser_goals: 0,
+      winner_goals: " ",
+      loser_goals: " ",
       password: '',
       users: [],
       goalError: false,
@@ -42,34 +42,39 @@ export default class SubmitResult extends React.Component {
   }
 
   handleSubmit (e) {
-    let goalError = false
-    let playerError = false
+    const { winner_id, loser_id, password } = this.state
+    let { winner_goals, loser_goals } = this.state
+    // winner_goals = parseInt(winner_goals)
+    // loser_goals = parseInt(loser_goals)
+    let errors = 0
     let game = {
-      winner_goals: this.state.winner_goals,
-      loser_goals: this.state.loser_goals,
-      winner_id: this.state.winner_id,
-      loser_id: this.state.loser_id
+      winner_goals,
+      loser_goals,
+      winner_id,
+      loser_id
     }
-    if (game.winner_goals < game.loser_goals) {
-      goalError = true
+    if (winner_goals < loser_goals || (winner_goals < 0 || loser_goals < 0)) {
       this.setState({goalError: true})
-    }
-    else if (game.winner_goals >= game.loser_goals) {
-      goalError = false
+      errors += 1
+    } else if (winner_goals >= loser_goals) {
       this.setState({goalError: false})
     }
 
-    if (game.winner_id === game.loser_id) {
-      playerError = true
+    // if (winner_goals < 0 || loser_goals < 0) {
+    //   this.setState({goalError: true})
+    // } else {
+    //   this.setState({goalError: false})
+    // }
+
+    if (winner_id === loser_id) {
       this.setState({playerError: true})
-    }
-    else if (game.winner_id != game.loser_id) {
-      playerError = false
+      errors += 1
+    } else if (winner_id !== loser_id) {
       this.setState({playerError: false})
     }
 
-    if (!goalError && !playerError) {
-      services.submitGame(game, this.state.password)
+    if (errors === 0) {
+      services.submitGame(game, password)
       .then(response => {
           this.setState({
             isSubmitted: true,
@@ -106,14 +111,14 @@ export default class SubmitResult extends React.Component {
   }
 
   handleWinScoreChange (e) {
-    let value = parseInt(e.target.value) || 0
+    let value = parseInt(e.target.value)
     this.setState({
       winner_goals: value
     })
   }
 
   handleLoseScoreChange (e) {
-    let value = parseInt(e.target.value) || 0
+    let value = parseInt(e.target.value)
     this.setState({
       loser_goals: value
     })
@@ -126,8 +131,7 @@ export default class SubmitResult extends React.Component {
     })
   }
   render () {
-    let options = this.getOptions()
-    const { isSubmitted } = this.state
+    const { isSubmitted, goalError, playerError, pwError } = this.state
     const startO = 0
     const endO = isSubmitted ? 1 : 0
     const startY = 150
@@ -150,8 +154,8 @@ export default class SubmitResult extends React.Component {
             <div className='winner-select select'>
               <h2>Winner</h2>
               <label>
-                <select className={this.state.playerError && 'error'} onChange={this.handleWinnerChange.bind(this)}>
-                  {this.getOptions()}
+                <select className={ playerError && 'error' } onChange={ this.handleWinnerChange.bind(this) }>
+                  { this.getOptions() }
                 </select>
               </label>
             </div>
@@ -167,33 +171,33 @@ export default class SubmitResult extends React.Component {
                 <div className='score'>
                   <div className='splitter'></div>
                   <div className='win-score'>
-                    <input className={this.state.goalError ? 'score-input error': 'score-input'} value={this.state.winner_goals} onChange={this.handleWinScoreChange.bind(this)}></input>
+                    <input type="number" min="0" className={ goalError ? 'score-input error': 'score-input' } placeholder={ 0 } onChange={ this.handleWinScoreChange.bind(this) }></input>
                   </div>
                   <div className='lose-score'>
-                    <input className={this.state.goalError ? 'score-input error': 'score-input'} value={this.state.loser_goals} onChange={this.handleLoseScoreChange.bind(this)}></input>
+                    <input type="number" min="0" className={ goalError ? 'score-input error': 'score-input' } placeholder={ 0 } onChange={ this.handleLoseScoreChange.bind(this) }></input>
                   </div>
                   <div className='splitter'></div>
                 </div>
               </div>
             </div>
-            <div className={'loser-select select'}>
+            <div className="loser-select select">
               <h2>Loser</h2>
               <label>
-                <select className={this.state.playerError && 'error'} onChange={this.handleLoserChange.bind(this)}>
-                  {this.getOptions()}
+                <select className={ playerError && 'error' } onChange={ this.handleLoserChange.bind(this) }>
+                  { this.getOptions() }
                 </select>
               </label>
             </div>
           </div>
           <div className="password-container">
-            <h3 className="password-header">Password</h3>
-            <input type="text" className={this.state.pwError ? 'password error' : 'password'} onChange={ this.handlePasswordChange.bind(this) }/>
+            <h2 className="password-header">Password</h2>
+            <input type="text" className={ pwError ? 'password error' : 'password' } onChange={ this.handlePasswordChange.bind(this) }/>
           </div>
-          <button className='submit-button' onClick={this.handleSubmit.bind(this)}>SUBMIT</button>
+          <button className='submit-button' onClick={ this.handleSubmit.bind(this) }>SUBMIT</button>
           <Motion defaultStyle={ {o: startO, y: startY} } style={ {o: spring(endO), y: spring(endY)} }>
             { style => (
                 <div className="submit-success" style={ {opacity: style.o, transform: `translateY(${style.y}%)`} }>
-                  <h3>Nice!</h3>
+                  <h1>Nice!</h1>
                 </div>
               )
             }

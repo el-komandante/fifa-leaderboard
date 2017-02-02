@@ -24,12 +24,10 @@ export default class Leaderboard extends React.Component {
           let user = users[i]
           services.getGames(user.id).then( games => {
             user.games = games.reverse()
-            console.log(user.games)
             //winner_score and loser_score are reversed
             user.oldScore = user.id === user.games[1].winner.id ? games[1].loser_score: games[1].winner_score
             user.newScore = user.score
             users[i] = user
-            console.log(user)
           })
           this.setState({users})
       }})
@@ -255,10 +253,5 @@ export default class Leaderboard extends React.Component {
         <div className="loader"></div>
       </div>
     )
-    // const users = this.state.users
-    // const startOpacity = 0
-    // const defaultStyles = users.map( () => { return {o: startOpacity} })
-    // let rows = this.getLeaderboardItems()
-    // console.log(defaultStyles)
   }
 }
