@@ -36,7 +36,7 @@ export default class UserDetail extends React.Component {
 
     return (
         <StaggeredMotion
-          defaultStyles={defaultStyles}
+          defaultStyles={ defaultStyles }
           styles={prevInterpolatedStyles => prevInterpolatedStyles.map((_, i) => {
             return i === 0
               ? {o: spring(1, springParams), y: spring(0, springParams)}
@@ -76,15 +76,16 @@ export default class UserDetail extends React.Component {
   }
 
   updateGraph () {
+      const { games } = this.state
       const margin = {top: 20, right: 20, bottom: 70, left: 50}
       const width = 400 - margin.left - margin.right
       const height = 300 - margin.top - margin.bottom
 
       const parseTime = d3.timeParse('%m/%d/%Y')
-      const formatTime = d3.timeFormat('%m/%d/%Y')
+      const formatTime = games[0].date - games[games.length - 1].date < 518400 ? d3.timeFormat('%b %d %_I%p') : d3.timeFormat('%m/%d/%Y')
 
 
-      const data = this.state.games.map( game => {
+      const data = games.map( game => {
         return {
           elo: this.state.user.id === game.loser.id ? game.winner_score : game.loser_score,
           date: new Date(1000 * game.date)
@@ -112,12 +113,12 @@ export default class UserDetail extends React.Component {
       const trans0 = svg.transition(t)
 
       trans0.selectAll('.axis--y').call(d3.axisLeft(y))
-      trans0.selectAll('.axis--x').call(d3.axisBottom(x).ticks(6).tickFormat(d3.timeFormat("%m/%d/%y")))
+      trans0.selectAll('.axis--x').call(d3.axisBottom(x).ticks(6).tickFormat(formatTime))
       .selectAll("text")
           .style("text-anchor", "end")
           .attr("dx", "-.8em")
           .attr("dy", ".15em")
-          .attr("transform", "rotate(-65)")
+          .attr("transform", "rotate(-35)")
 
       let path0 = d3.select('.line')
       let totalLength0 = path0.node().getTotalLength()
@@ -235,7 +236,7 @@ export default class UserDetail extends React.Component {
               .style("text-anchor", "end")
               .attr("dx", "-.8em")
               .attr("dy", ".15em")
-              .attr("transform", "rotate(-65)")
+              .attr("transform", "rotate(-45)")
 
 
         g.append("g")
