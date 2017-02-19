@@ -12,6 +12,14 @@ services:
     image: "elkomandante/fifa-api"
     ports:
     - "3002:3002"
+  frontend:
+    image: "fifa-frontend"
+    volumes:
+    - build:/app
+    ports:
+    - "80:80"
 volumes:
   data:
+    driver: "local"
+  build:
     driver: "local"

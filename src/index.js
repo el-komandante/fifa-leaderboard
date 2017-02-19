@@ -1,4 +1,4 @@
-import { Router, Route, IndexRoute, IndexLink, hashHistory, Link } from 'react-router'
+import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 import ReactDOM from 'react-dom'
 import React from 'react'
 import Leaderboard from './components/Leaderboard'

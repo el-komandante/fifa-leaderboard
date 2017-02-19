@@ -74,7 +74,7 @@ export default class Leaderboard extends React.Component {
   }
 
   handleNameSort () {
-    if (this.state.sort != 'name-desc') {
+    if (this.state.sort !== 'name-desc') {
       const sorted = this.state.users.sort( (a, b) => {
         if (a.name < b.name) {
           return -1
@@ -107,7 +107,7 @@ export default class Leaderboard extends React.Component {
   }
 
   handleEloSort () {
-    if (this.state.sort != 'elo-desc') {
+    if (this.state.sort !== 'elo-desc') {
       const sorted = this.state.users.sort( (a, b) => {
         if (a.score < b.score) {
           return 1
@@ -140,7 +140,7 @@ export default class Leaderboard extends React.Component {
   }
 
   handleWinSort () {
-    if (this.state.sort != 'win-desc') {
+    if (this.state.sort !== 'win-desc') {
       const sorted = this.state.users.sort( (a, b) => {
         if (a.wins < b.wins) {
           return 1
@@ -173,7 +173,7 @@ export default class Leaderboard extends React.Component {
   }
 
   handleLoseSort () {
-    if (this.state.sort != 'lose-desc') {
+    if (this.state.sort !== 'lose-desc') {
       const sorted = this.state.users.sort( (a, b) => {
         if (a.losses < b.losses) {
           return 1
@@ -220,10 +220,10 @@ export default class Leaderboard extends React.Component {
             <h2 className='ea-font rankings'>RANKINGS</h2>
             <div className='leaderboard-header'>
               <div className='leaderboard-header-item position'></div>
-              <div className='leaderboard-header-item name' onClick={this.handleNameSort.bind(this)}><a href='javascript:void(0)'>Name</a></div>
-              <div className='leaderboard-header-item wins' onClick={this.handleWinSort.bind(this)}><a href='javascript:void(0)'>Wins</a></div>
-              <div className='leaderboard-header-item losses' onClick={this.handleLoseSort.bind(this)}><a href='javascript:void(0)'>Losses</a></div>
-              <div className='leaderboard-header-item elo' onClick={this.handleEloSort.bind(this)}><a href='javascript:void(0)'>Elo</a></div>
+              <div className='leaderboard-header-item name' onClick={this.handleNameSort.bind(this)}>Name</div>
+              <div className='leaderboard-header-item wins' onClick={this.handleWinSort.bind(this)}>Wins</div>
+              <div className='leaderboard-header-item losses' onClick={this.handleLoseSort.bind(this)}>Losses</div>
+              <div className='leaderboard-header-item elo' onClick={this.handleEloSort.bind(this)}>Elo</div>
               <div className='leaderboard-header-item one-week'></div>
             </div>
           </div>

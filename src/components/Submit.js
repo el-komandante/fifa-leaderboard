@@ -36,7 +36,7 @@ export default class SubmitResult extends React.Component {
 
   getOptions () {
     let users = this.state.users.map( (user, i) => {
-      return <option key={user} data-id={user.id} key={i}>{user.name}</option>
+      return <option key={user.name} data-id={user.id}>{ user.name }</option>
     })
     return users
   }
@@ -111,14 +111,14 @@ export default class SubmitResult extends React.Component {
   }
 
   handleWinScoreChange (e) {
-    let value = parseInt(e.target.value)
+    let value = parseInt(e.target.value, 10)
     this.setState({
       winner_goals: value
     })
   }
 
   handleLoseScoreChange (e) {
-    let value = parseInt(e.target.value)
+    let value = parseInt(e.target.value, 10)
     this.setState({
       loser_goals: value
     })

@@ -1,36 +1,10 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
-
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
-
-
-/*Colors:
-*Main Orange: #ff5500
-*Shadow Orange: #d04702
-*Dark Grey: #333
-*
-*/
+/*
+ *Colors:
+ *Main Orange: #ff5500
+ *Shadow Orange: #d04702
+ *Dark Grey: #333
+ *
+ */
 
 @media (max-width: 600px) {
   .score .score-input {
@@ -400,6 +374,7 @@ label:after {
   text-align: left;
   flex-basis: 0;
   padding: 5px;
+  cursor: pointer;
 }
 .position {
   flex-grow: 1;
@@ -493,6 +468,9 @@ div.tooltip {
   pointer-events: none;
   color: white;
 }
+.tick > text {
+  font-size: 10px;
+}
 .row, .recent-game-header {
   display: flex;
   width: 100%;
@@ -526,42 +504,6 @@ div.tooltip {
     color: #333;
 }
 /*Transitions*/
-.pageSlide-enter {
-  opacity: 0;
-  transform: translate(100%);
-}
-.pageSlide-enter.pageSlide-enter-active {
-  opacity: 1;
-  transform: translate(0%);
-  transition: all 300ms ease-in-out;
-}
-.pageSlide-leave {
-  opacity: 1;
-  transform: translate3(0%);
-}
-.pageSlide-leave.pageSlide-leave-active {
-  opacity: 0;
-  transform: translate(-100%);
-  transition: all 200ms ease-in-out;
-}
-.reversePageSlide-enter {
-  opacity: 0;
-  transform: translate(-100%);
-}
-.reversePageSlide-enter.reversePageSlide-enter-active {
-  opacity: 1;
-  transform: translate(0%);
-  transition: all 300ms ease-in-out;
-}
-.reversePageSlide-leave {
-  opacity: 1;
-  transform: translate3(0%);
-}
-.reversePageSlide-leave.reversePageSlide-leave-active {
-  opacity: 0;
-  transform: translate(100%);
-  transition: all 200ms ease-in-out;
-}
 /*ANIMATIONS*/
 /*Error*/
 @keyframes shake {

@@ -1,13 +1,9 @@
-/* jshint esversion: 6 */
-/*jshint asi:true*/
 import React from 'react'
 import { IndexLink } from 'react-router'
-// import { select, axis, scaleTime, timeParse, scaleLinear, extent, axisBottom, axisLeft } from 'd3'
-// import line from 'd3-shape'
 import * as d3 from 'd3'
 import * as services from '../api-services/apiService'
 import moment from 'moment'
-import { StaggeredMotion, spring } from 'react-motion'
+import { Motion, spring } from 'react-motion'
 
 export default class UserDetail extends React.Component {
   constructor(props) {
@@ -27,61 +23,70 @@ export default class UserDetail extends React.Component {
   }
 
   getGames () {
-    const games = this.state.games.length >= 5 ? this.state.games.reverse().slice(0,5): this.state.games.reverse().slice(0, this.state.games.length)
     const user = this.state.user
+    let games = this.state.games.length >= 5 ? this.state.games.reverse().slice(0,5): this.state.games.reverse().slice(0, this.state.games.length)
+    // console.log(games)
+    if (games) {
+      games = games.map((game) => {
+        if (game.winner_goals === game.loser_goals) {
+          game.result = 'D'
+        } else if (game.winner_id === user.id) {
+          game.result = 'W'
+        } else {
+          game.result = 'L'
+        }
+        return game
+      })
+    }
     const startOpacity = 0
-    const startY = 100
-    const defaultStyles = games.map( () => { return {o: startOpacity, y: startY} })
-    const springParams = {stiffness: 190, damping: 22}
+    const endO = 1
+    const startY = 70
+    const endY = 0
 
     return (
-        <StaggeredMotion
-          defaultStyles={defaultStyles}
-          styles={prevInterpolatedStyles => prevInterpolatedStyles.map((_, i) => {
-            return i === 0
-              ? {o: spring(1, springParams), y: spring(0, springParams)}
-              : {o: spring(prevInterpolatedStyles[i - 1].o), y: spring(prevInterpolatedStyles[i - 1].y, springParams)}
-          })}>
-          {interpolatingStyles =>
-            <div>
-              {interpolatingStyles.map((style, i) =>
-                <div key={i} className='row' style={{opacity: style.o, transform: `translateY(${style.y}px)`}}>
-                  <div className='recent-game-item recent-game-result'>
-                    {
-                      games[i].winner_goals === games[i].loser_goals
-                      ? 'D'
-                      : games[i].winner.id === user.id
-                        ? 'W'
-                        : 'L'
-                    }
-                  </div>
-                  <div className='recent-game-item recent-game-vs'>
-                    {
-                      games[i].winner.id === user.id ? <a href={`./#/users/${games[i].loser.id}`}>{games[i].loser.name}</a>
-                    :<a href={`./#/users/${games[i].winner.id}`}>{games[i].winner.name}</a>
-                    }
-                  </div>
-                  <div className='recent-game-item recent-game-score'>
-                    {`${games[i].winner_goals} - ${games[i].loser_goals}`}
-                  </div>
-                  <div className='recent-game-item recent-game-date'>
-                    {moment.unix(games[i].date).format('MM/DD/YYYY')}
-                  </div>
+      <Motion
+        defaultStyle={ {y: startY, o: startOpacity} }
+        style={ {y: spring(endY), o: spring(endO)} }>
+        { style =>
+          <div style={ {transform: `translate3d(0, ${style.y}px, 0)`, opacity: style.o} }>
+            {games.map((game) =>
+              <div key={game.date} className='row'>
+                <div className='recent-game-item recent-game-result'>
+                  { game.result }
                 </div>
-              )}
-            </div>
-          }
-        </StaggeredMotion>
+                <div className='recent-game-item recent-game-vs'>
+                  {
+                    game.winner.id === user.id ? <a href={`./#/users/${game.loser.id}`}>{game.loser.name}</a>
+                  :<a href={`./#/users/${game.winner.id}`}>{game.winner.name}</a>
+                  }
+                </div>
+                <div className='recent-game-item recent-game-score'>
+                  {`${game.winner_goals} - ${game.loser_goals}`}
+                </div>
+                <div className='recent-game-item recent-game-date'>
+                  {moment.unix(game.date).format('MM/DD/YYYY')}
+                </div>
+              </div>
+            )}
+          </div>
+        }
+      </Motion>
     )
   }
+  timeBetween (start, end) {
+    const day = 1000 * 60 * 60 * 24
+    const m1 = start.getTime()
+    const m2 = end.getTime()
+    const diff = m1 - m2
 
+    return Math.round(diff / day)
+  }
   updateGraph () {
       const margin = {top: 20, right: 20, bottom: 70, left: 50}
       const width = 400 - margin.left - margin.right
       const height = 300 - margin.top - margin.bottom
 
-      const parseTime = d3.timeParse('%m/%d/%Y')
-      const formatTime = d3.timeFormat('%m/%d/%Y')
+      // const formatTime = d3.timeFormat('%m/%d/%Y')
 
 
       const data = this.state.games.map( game => {
@@ -90,6 +95,8 @@ export default class UserDetail extends React.Component {
           date: new Date(1000 * game.date)
         }
       })
+      const daysBetween = this.timeBetween(data[0].date, data[data.length - 1].date)
+      const formatTime = daysBetween > 5 ? d3.timeFormat('%b %d %-I%p') : d3.timeFormat("%m/%d/%y")
 
       let x = d3.scaleTime()
               .rangeRound([0, width])
@@ -108,16 +115,16 @@ export default class UserDetail extends React.Component {
 
       const t = d3.transition().duration(500)
       const lineT = d3.transition().duration(500)
-      let transitioning = false
       const trans0 = svg.transition(t)
 
       trans0.selectAll('.axis--y').call(d3.axisLeft(y))
-      trans0.selectAll('.axis--x').call(d3.axisBottom(x).ticks(6).tickFormat(d3.timeFormat("%m/%d/%y")))
-      .selectAll("text")
-          .style("text-anchor", "end")
-          .attr("dx", "-.8em")
-          .attr("dy", ".15em")
-          .attr("transform", "rotate(-65)")
+      trans0.selectAll('.axis--x').call(d3.axisBottom(x).ticks(6).tickFormat(formatTime))
+      .selectAll('text')
+          .style('text-anchor', 'end')
+          .attr('dx', '-.8em')
+          .attr('dy', '.15em')
+          .attr('font-size', '10')
+          .attr('transform', 'rotate(-65)')
 
       let path0 = d3.select('.line')
       let totalLength0 = path0.node().getTotalLength()
@@ -194,7 +201,6 @@ export default class UserDetail extends React.Component {
         //   }
         // })
         let data = []
-        let parseTime = d3.timeParse('%m/%d/%Y')
         let formatTime = d3.timeFormat('%m/%d/%Y')
 
         data = data.map( d => { return {elo: +d.elo, date: new Date(d.date * 1000)} } )
@@ -302,7 +308,7 @@ export default class UserDetail extends React.Component {
           .style('fill-opacity', 1)
     }
   componentWillReceiveProps (nextProps) {
-    let id = parseInt(nextProps.params.id)
+    let id = parseInt(nextProps.params.id, 10)
     services.getUser(id)
     .then( user => {
       services.getGames(id)
@@ -313,7 +319,7 @@ export default class UserDetail extends React.Component {
   }
 
   shouldComponentUpdate (nextProps, nextState) {
-    return nextState != this.state
+    return nextState !== this.state
   }
 
   componentDidUpdate () {
@@ -346,7 +352,7 @@ export default class UserDetail extends React.Component {
             <div className='recent-game-header-item recent-game-date'>Date</div>
           </div>
           <div className='recent-games'>
-            {games}
+            { games }
           </div>
         </div>
       )
