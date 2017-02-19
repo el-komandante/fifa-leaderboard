@@ -1,11 +1,10 @@
-/*
- *Colors:
- *Main Orange: #ff5500
- *Shadow Orange: #d04702
- *Dark Grey: #333
- *
- */
-
+/*Colors:
+*Main Orange: #ff5500
+*Shadow Orange: #d04702
+*Dark Grey: #333
+*
+*/
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
 @media (max-width: 600px) {
   .score .score-input {
     width: 70%;

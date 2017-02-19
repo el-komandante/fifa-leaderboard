@@ -82,14 +82,12 @@ export default class UserDetail extends React.Component {
     return Math.round(diff / day)
   }
   updateGraph () {
+      const { games } = this.state
       const margin = {top: 20, right: 20, bottom: 70, left: 50}
       const width = 400 - margin.left - margin.right
       const height = 300 - margin.top - margin.bottom
 
-      // const formatTime = d3.timeFormat('%m/%d/%Y')
-
-
-      const data = this.state.games.map( game => {
+      const data = games.map( game => {
         return {
           elo: this.state.user.id === game.loser.id ? game.winner_score : game.loser_score,
           date: new Date(1000 * game.date)
@@ -241,7 +239,7 @@ export default class UserDetail extends React.Component {
               .style("text-anchor", "end")
               .attr("dx", "-.8em")
               .attr("dy", ".15em")
-              .attr("transform", "rotate(-65)")
+              .attr("transform", "rotate(-45)")
 
 
         g.append("g")
